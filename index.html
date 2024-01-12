@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ant Project</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Ant Project</h1>
+    </header>
+    <main id="grid-container">
+        <canvas id="myCanvas" width="800" height="800"></canvas>
+
+
+
+        <script>
+            // let _grid = [
+            //     [0, 0, 0],
+            //     [0, 1, 0],
+            //     [0, 2, 0],
+            //     [0, 0, 0],
+            // ];
+
+            // let _nbLines   = _grid.length; // Nombre d'éléments dans le tableau (nombre de lignes).
+            // let _nbColumns = _grid[0].length; // Nombre de colonnes.
+            // let _cellSize  = 100; // La taille d'une cellule en pixel.
+
+            // let canvas = document.getElementById('myCanvas'); // Récupération d'une balise HTML par son ID.
+            // canvas.width  = _nbColumns * _cellSize;
+            // canvas.height = _nbLines * _cellSize;
+            // let ctx = canvas.getContext('2d'); // Récupération de la surface de dessin.
+
+            // const HEXTILES_IMAGE = new Image();
+            // HEXTILES_IMAGE.src = '../image/tree.png';
+            // Promise.all([
+            //     new Promise( (resolve) => {HEXTILES_IMAGE.addEventListener('load', () => { resolve();}); })
+            // ])
+            // .then(() => {
+            //     for (let x = 0; x < _nbColumns; x++) {
+            //         for (let y = 0; y < _nbLines; y++) {
+            //             ctx.strokeRect(x * _cellSize, y * _cellSize, _cellSize, _cellSize);
+            //             if (_grid[y][x] === 1) { // Dessinez l'image seulement si la cellule de la grille est 1
+            //                 ctx.drawImage(HEXTILES_IMAGE, x * _cellSize, y * _cellSize, _cellSize, _cellSize);
+            //             }
+            //         }
+            //     }
+            // });
+            const HEXTILES_IMAGE = new Image();
+            HEXTILES_IMAGE.src = '../image/tree.png'; // Mettez le chemin correct de l'image ici
+            Promise.all([
+                new Promise((resolve) => { HEXTILES_IMAGE.addEventListener('load', () => { resolve(); }); })
+            ])
+            .then(() => {
+                let canvas = document.getElementById('myCanvas');
+                let ctx = canvas.getContext('2d');
+                let cellSize = 150; // Taille de chaque tuile dans l'image
+
+                let grid = [
+                    [0, 1, 2],
+                    [0, -1, 0],
+                    [0, 0, 0],
+                    [0, 0, 0],
+                ];
+
+                for (let i = 0; i < grid.length; i++) {
+                    for (let j = 0; j < grid[i].length; j++) {
+                        let tileIndex = grid[i][j];
+                        let sx = tileIndex * cellSize;
+                        let sy = 0;
+                        ctx.drawImage(HEXTILES_IMAGE, sx, sy, cellSize, cellSize, j * cellSize, i * cellSize, cellSize, cellSize);
+                    }
+                }
+            });
+
+        </script>
+
+        <!-- pierre-antoine.jean@mines-ales.fr -->
+
+
+
+
+    </main>
+    <!-- <script src="js/models/grid.js"></script> -->
+    <script src="js/views/gridView.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
