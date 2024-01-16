@@ -1,18 +1,18 @@
-class Grid {
+// MODEL SECTION
+class GridModel {
     constructor() {
-      this.gridSize = 20;
-      this.grid = this.createGrid(this.gridSize);
+        this.grid = [
+            [0, 1, 2],
+            [0, -1, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ];
     }
   
-    createGrid(size) {
-      let grid = [];
-      for (let i = 0; i < size; i++) {
-        grid[i] = [];
-        for (let j = 0; j < size; j++) {
-          grid[i][j] = 0;
-        }
-      }
-      return grid;
+    getGrid() {
+        return this.grid;
     }
   }
+  
+  export default GridModel;
   
