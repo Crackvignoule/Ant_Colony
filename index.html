@@ -12,47 +12,7 @@
     </header>
     <main id="grid-container">
         <canvas id="myCanvas" width="800" height="800"></canvas>
-
-
-
-        <!-- <script>
-            const HEXTILES_IMAGE = new Image();
-            HEXTILES_IMAGE.src = '../image/tree.png'; // Mettez le chemin correct de l'image ici
-            Promise.all([
-                new Promise((resolve) => { HEXTILES_IMAGE.addEventListener('load', () => { resolve(); }); })
-            ])
-            .then(() => {
-
-                // VIEW SECTION
-                let canvas = document.getElementById('myCanvas');
-                let ctx = canvas.getContext('2d');
-                let cellSize = 150; // Taille de chaque tuile dans l'image
-
-                // MODEL SECTION
-                let grid = [
-                    [0, 1, 2],
-                    [0, -1, 0],
-                    [0, 0, 0],
-                    [0, 0, 0],
-                ];
-
-                // VIEW SECTION
-                for (let i = 0; i < grid.length; i++) {
-                    for (let j = 0; j < grid[i].length; j++) {
-                        let tileIndex = grid[i][j];
-                        let sx = tileIndex * cellSize;
-                        let sy = 0;
-                        ctx.drawImage(HEXTILES_IMAGE, sx, sy, cellSize, cellSize, j * cellSize, i * cellSize, cellSize, cellSize);
-                    }
-                }
-            });
-        </script> -->
-
-        <!-- pierre-antoine.jean@mines-ales.fr -->
-
     </main>
-    <!-- <script src="js/models/grid.js"></script> -->
-    <!-- <script src="js/views/gridView.js"></script> -->
     <script type="module" src="js/main.js"></script>
 </body>
 </html>
