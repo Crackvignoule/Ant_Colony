@@ -1,12 +1,7 @@
 // MODEL SECTION
 class GridModel {
     constructor() {
-        this.grid = [
-            [0, 1, 2],
-            [0, -1, 0],
-            [0, 0, 0],
-            [0, 0, 0],
-        ];
+        this.grid = this.grid = Array(18).fill().map(() => Array(18).fill(1));
     }
   
     getGrid() {
