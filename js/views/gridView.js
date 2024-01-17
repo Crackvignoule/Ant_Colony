@@ -55,32 +55,18 @@ class GridView {
 }
 
     drawBackground(grid) {
-        // Calculate the width and height of the grid
-        let gridWidth = grid[0].length * this.cellSize;
-        let gridHeight = grid.length * this.cellSize;
-        let cornerRadius = 10; // Set the corner radius here
-        
-        // Set the canvas width and height
-        this.canvas.width = gridWidth;
-        this.canvas.height = gridHeight;
-
-        // Start the path for the rounded rectangle
-        this.ctx.beginPath();
-        this.ctx.moveTo(cornerRadius, 0);
-        this.ctx.lineTo(gridWidth - cornerRadius, 0);
-        this.ctx.arcTo(gridWidth, 0, gridWidth, cornerRadius, cornerRadius);
-        this.ctx.lineTo(gridWidth, gridHeight - cornerRadius);
-        this.ctx.arcTo(gridWidth, gridHeight, gridWidth - cornerRadius, gridHeight, cornerRadius);
-        this.ctx.lineTo(cornerRadius, gridHeight);
-        this.ctx.arcTo(0, gridHeight, 0, gridHeight - cornerRadius, cornerRadius);
-        this.ctx.lineTo(0, cornerRadius);
-        this.ctx.arcTo(0, 0, cornerRadius, 0, cornerRadius);
-        this.ctx.closePath();
+    // Calculate the width and height of the grid
+    let gridWidth = grid[0].length * this.cellSize;
+    let gridHeight = grid.length * this.cellSize;
     
-        // Fill the rectangle with green color
-        this.ctx.fillStyle = '#72751b';
-        this.ctx.fill();
-    }
+    // Set the canvas width and height
+    this.canvas.width = gridWidth+10;
+    this.canvas.height = gridHeight+10;
+
+    // Draw a rectangle that fills the entire grid
+    this.ctx.fillStyle = '#72751b'; // Set the fill color to green
+    this.ctx.fillRect(0, 0, gridWidth+10, gridHeight+10);
+}
     
     drawGrid(grid) {
         this.drawBackground(grid);
