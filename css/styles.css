@@ -1,3 +1,11 @@
+h1 {
+    font-size: 2.5em; /* adjust as needed */
+    color: #72551e; /* adjust as needed */
+    font-weight: bold; /* adjust as needed */
+    text-align: center;
+    text-shadow: 1px 1px 2px #000000;
+}
+
 body {
     background-color: #97a833;
     font-size: 18px;
@@ -5,9 +13,9 @@ body {
 }
 
 div {
-    
-    padding-right: 2%;
-    padding-bottom: 2%;
+    padding-top: 1%;
+    padding-right: 10%;
+    padding-bottom: 1%;
 }
 
 canvas {
@@ -16,4 +24,60 @@ canvas {
     margin-left: auto;
     display: block;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.container {
+    display: flex;
+    align-items: center;
+}
+
+#chrono {
+    font-size: 4em; /* adjust as needed */
+    margin: auto;
+}
+
+#left-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#button-panel {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    padding-left: 10%;
+}
+
+#start-button, #pheromones-button {
+    margin: 0 2px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background: linear-gradient(to bottom, yellow, orange);
+    border: none;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+#start-button:hover, #pheromones-button:hover {
+    background: orange;
+    color: black;
+}
+
+#start-button.active {
+    background: red;
+    color: white;
+}
+
+#stop-button:hover, #pheromones-button:hover {
+    background: orange;
+    color: rgb(255, 255, 255);
 }

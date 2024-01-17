@@ -7,11 +7,20 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <header>
-        <h1>Ant Project</h1>
-    </header>
     <main id="grid-container">
-        <div>
+        <div class="container">
+
+            <div id="left-panel">
+                <header>
+                    <h1>Ant Project</h1>
+                </header>
+                <p id="chrono">00:00</p>
+                <div id="button-panel">
+                    <button id="start-button">Start</button>
+                    <button id="pheromones-button">Pheromones</button>
+                </div>
+            </div>
+            
             <canvas id="myCanvas"></canvas>
         </div>
     </main>
