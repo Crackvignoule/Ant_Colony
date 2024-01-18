@@ -9,12 +9,14 @@ class GridView {
         this.canvas = document.getElementById('myCanvas');
         this.ctx = this.canvas.getContext('2d');
         this.cellSize = 36; // Taille de chaque tuile dans l'image
+        this.START_IMAGE = new Image();
+        this.START_IMAGE.src = '../image/foodAndColony.png'; //35 646
         this.TREE_IMAGE = new Image();
-        this.TREE_IMAGE.src = '../image/tree.png'; // Replace with the correct path to your image
+        this.TREE_IMAGE.src = '../image/tree.png'; 
         this.SHADOW_IMAGE = new Image();
-        this.SHADOW_IMAGE.src = '../image/shadow.png'; // Replace with the actual path to your shadow image
+        this.SHADOW_IMAGE.src = '../image/shadow.png';
         this.KEBAB_IMAGE = new Image();
-        this.KEBAB_IMAGE.src = '../image/kebab.png'; // Replace with the actual path to your shadow image
+        this.KEBAB_IMAGE.src = '../image/kebab.png'; 
     }
 
     loadImage() {
@@ -28,13 +30,25 @@ class GridView {
         ]);
     }
 
+    drawStart(i, j, scale) {
+        let sx = 35; // x-coordinate of the top left corner of the source rectangle
+        let sy = 646; // y-coordinate of the top left corner of the source rectangle
+        this.ctx.drawImage(
+            this.START_IMAGE, 
+            sx, sy, 
+            30, 26,
+            j * this.cellSize, i * this.cellSize, 
+            this.cellSize * scale, this.cellSize * scale
+        );
+    }
+
     drawObstacle(i, j, scale) {
         let sx = 0; // x-coordinate of the top left corner of the source rectangle
         let sy = 0; // y-coordinate of the top left corner of the source rectangle
         this.ctx.drawImage(
             this.TREE_IMAGE, 
             sx, sy, 
-            137, 153, // Use the actual dimensions of the first tree
+            137, 153,
             j * this.cellSize, i * this.cellSize, 
             this.cellSize * scale, this.cellSize * scale
         );
