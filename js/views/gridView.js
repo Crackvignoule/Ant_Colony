@@ -9,16 +9,18 @@ class GridView {
         this.canvas = document.getElementById('myCanvas');
         this.ctx = this.canvas.getContext('2d');
         this.cellSize = 36; // Taille de chaque tuile dans l'image
-        this.HEXTILES_IMAGE = new Image();
-        this.HEXTILES_IMAGE.src = '../image/tree.png'; // Replace with the correct path to your image
+        this.TREE_IMAGE = new Image();
+        this.TREE_IMAGE.src = '../image/tree.png'; // Replace with the correct path to your image
         this.SHADOW_IMAGE = new Image();
         this.SHADOW_IMAGE.src = '../image/shadow.png'; // Replace with the actual path to your shadow image
+        this.KEBAB_IMAGE = new Image();
+        this.KEBAB_IMAGE.src = '../image/kebab.png'; // Replace with the actual path to your shadow image
     }
 
     loadImage() {
         return Promise.all([
             new Promise((resolve) => {
-                this.HEXTILES_IMAGE.addEventListener('load', resolve);
+                this.TREE_IMAGE.addEventListener('load', resolve);
             }),
             new Promise((resolve) => {
                 this.SHADOW_IMAGE.addEventListener('load', resolve);
@@ -30,7 +32,7 @@ class GridView {
         let sx = 0; // x-coordinate of the top left corner of the source rectangle
         let sy = 0; // y-coordinate of the top left corner of the source rectangle
         this.ctx.drawImage(
-            this.HEXTILES_IMAGE, 
+            this.TREE_IMAGE, 
             sx, sy, 
             137, 153, // Use the actual dimensions of the first tree
             j * this.cellSize, i * this.cellSize, 
@@ -45,19 +47,31 @@ class GridView {
         let sh = 152 - sy; // height of the source rectangle for the shadow
         
         // Calculate the scale factor based on the original dimensions of the shadow
-    let shadowScale = Math.min(this.cellSize * scale / sw, this.cellSize * scale / sh);
+        let shadowScale = Math.min(this.cellSize * scale / sw, this.cellSize * scale / sh);
 
-    // Add an offset to the y-coordinate to move the shadow down
-    let yOffset = 30; // Adjust this value to move the shadow up or down
+        // Adjust this value to move the shadow up or down
+        let yOffset = 30;
 
-    this.ctx.drawImage(
-        this.SHADOW_IMAGE, 
-        sx, sy, 
-        sw, sh, 
-        j * this.cellSize, (i * this.cellSize) + yOffset, 
-        sw * shadowScale, sh * shadowScale
-    );
+        this.ctx.drawImage(
+            this.SHADOW_IMAGE, 
+            sx, sy, 
+            sw, sh, 
+            j * this.cellSize, (i * this.cellSize) + yOffset, 
+            sw * shadowScale, sh * shadowScale
+        );
 }
+
+    drawObjective(i, j, scale) {
+        let sx = 0;
+        let sy = 0;
+        this.ctx.drawImage(
+            this.KEBAB_IMAGE, 
+            sx, sy, 
+            499, 499,
+            j * this.cellSize, i * this.cellSize, 
+            this.cellSize * scale, this.cellSize * scale
+        );
+    }
 
     drawBackground(grid) {
     let Offset = 20;
