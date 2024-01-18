@@ -1,3 +1,8 @@
+import {Free} from "../models/free.js";
+import {Obstacle} from "../models/obstacle.js";
+import {Objective} from "../models/objective.js";
+import {Start} from "../models/start.js";
+
 // VIEW SECTION
 class GridView {
     constructor() {
@@ -21,7 +26,7 @@ class GridView {
         ]);
     }
 
-    drawTree1(i, j, scale) {
+    drawObstacle(i, j, scale) {
         let sx = 0; // x-coordinate of the top left corner of the source rectangle
         let sy = 0; // y-coordinate of the top left corner of the source rectangle
         this.ctx.drawImage(
@@ -55,17 +60,19 @@ class GridView {
 }
 
     drawBackground(grid) {
+    let Offset = 10;
+
     // Calculate the width and height of the grid
     let gridWidth = grid[0].length * this.cellSize;
     let gridHeight = grid.length * this.cellSize;
     
     // Set the canvas width and height
-    this.canvas.width = gridWidth+10;
-    this.canvas.height = gridHeight+10;
+    this.canvas.width = gridWidth+Offset;
+    this.canvas.height = gridHeight+Offset;
 
     // Draw a rectangle that fills the entire grid
     this.ctx.fillStyle = '#72751b'; // Set the fill color to green
-    this.ctx.fillRect(0, 0, gridWidth+10, gridHeight+10);
+    this.ctx.fillRect(0, 0, gridWidth+Offset, gridHeight+Offset);
 }
     
     drawGrid(grid) {
@@ -73,10 +80,17 @@ class GridView {
         
         for (let i = 0; i < grid.length; i++) {
             for (let j = 0; j < grid[i].length; j++) {
-                if (grid[i][j] === 1) {
-    
-                    this.drawShadow(i, j, 1);
-                    this.drawTree1(i, j, 1.2);
+                let cell = grid[i][j];
+                if (cell instanceof Free) { 
+                    // this.drawFree(i, j, 1);
+                } else if (cell instanceof Obstacle) { 
+                    this.drawObstacle(i, j, 1.4);
+                }
+                else if (cell instanceof Objective) { 
+                    this.drawObjective(i, j, 1);
+                }
+                else if (cell instanceof Start) { 
+                    this.drawStart(i, j, 1);
                 }
             }
         }

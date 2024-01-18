@@ -1,7 +1,9 @@
-class Cell {
-    constructor() {
-        // Initialize your properties here
+/* La classe mère */
+export class Cell {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
     }
-}
 
-module.exports = Cell;
+    GetType() { return this.constructor.name; }
+}
