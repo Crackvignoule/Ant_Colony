@@ -14,6 +14,7 @@ let minutes = 0;
 let seconds = 0;
 let intervalId = null;
 
+// Mettre chrono dans MVC pour que les fourmis puissent s'arrêter avec le chrono
 document.getElementById('start-button').addEventListener('click', function() {
     let button = this;
 
