@@ -8,7 +8,7 @@ class GridView {
     constructor() {
         this.canvas = document.getElementById('myCanvas');
         this.ctx = this.canvas.getContext('2d');
-        this.cellSize = 50; // Taille de chaque tuile dans l'image
+        this.cellSize = 36; // Taille de chaque tuile dans l'image
         this.HEXTILES_IMAGE = new Image();
         this.HEXTILES_IMAGE.src = '../image/tree.png'; // Replace with the correct path to your image
         this.SHADOW_IMAGE = new Image();
@@ -60,7 +60,7 @@ class GridView {
 }
 
     drawBackground(grid) {
-    let Offset = 10;
+    let Offset = 20;
 
     // Calculate the width and height of the grid
     let gridWidth = grid[0].length * this.cellSize;
@@ -83,8 +83,9 @@ class GridView {
                 let cell = grid[i][j];
                 if (cell instanceof Free) { 
                     // this.drawFree(i, j, 1);
-                } else if (cell instanceof Obstacle) { 
-                    this.drawObstacle(i, j, 1.4);
+                } else if (cell instanceof Obstacle) {
+                    this.drawShadow(i, j, 1.1); 
+                    this.drawObstacle(i, j, 1.5);
                 }
                 else if (cell instanceof Objective) { 
                     this.drawObjective(i, j, 1);
