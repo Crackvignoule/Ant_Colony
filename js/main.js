@@ -1,5 +1,5 @@
 import GridModel from './models/grid.js';
-import GridView from './views/gridView.js';
+import GridView from './views/View.js';
 import GridController from './controllers/gridController.js';
 
 

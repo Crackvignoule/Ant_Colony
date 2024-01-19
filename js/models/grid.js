@@ -21,7 +21,7 @@ class GridModel {
         };
 
         this.numberGrid = [
-            [1, 1, 1 , 1, 1, 1, 1, 1, 1, 1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1],
             [1, 1, 1, 0, 0, 0, 0, 0, 1, 0 ,0, 0, 0, 0, 1, 1, 1, 1],
             [1, 1, 1, 0, 1, 0, 1, 0, 1, 0 ,1, 0, 1, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 1, 0, 1, 0, 1, 0 ,1, 0, 1, 1, 1, 1, 0, 1],
@@ -38,8 +38,9 @@ class GridModel {
             [1, 0, 1, 0, 0, 0, 0, 1, 0, 1 ,0, 1, 0, 1, 1, 1, 0, 1],
             [1, 0, 1, 0, 1, 0, 1, 1, 0, 1 ,0, 1, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 1, 0, 1, 1, 0, 0 ,0, 1, 1, 1, 1, 1, 1, 1],
-            [1, 1, 1 , 1, 1, 1, 1, 1, 1, 1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1],
         ];
+        // add 4 random food
         this.numberGrid = this.addObjective(this.numberGrid);
         // Convert number grid to object grid
         this.grid = this.numberGrid.map(row => row.map(cell => objectMapping[cell]));
@@ -61,7 +62,7 @@ class GridModel {
             console.log("Pas assez de zéros pour placer trois '2'");
         } else {
             // Sélectionner aléatoirement trois emplacements et les remplacer par "2"
-            for (let k = 0; k < 3; k++) {
+            for (let k = 0; k < 4; k++) {
                 let randomIndex = Math.floor(Math.random() * zeroLocations.length);
                 let location = zeroLocations.splice(randomIndex, 1)[0];
                 numberGrid[location[0]][location[1]] = 2;

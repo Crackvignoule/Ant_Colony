@@ -49,10 +49,13 @@ class GridView {
                         (seconds < 10 ? '0' : '') + seconds;
                 }, 1000);
 
+                // TODO
                 // print gridmodel.ants in the console by using bindings
                 this.ants = this.createAnts(10);
-                
-
+                // move ant
+                this.ants[0].move('right'); // x and y are updated
+                // update display (move ant animation)
+                this.drawAnt(this.ants[0].y, this.ants[0].x);
 
                 this.startGame(intervalId);
             } else {
@@ -85,35 +88,9 @@ class GridView {
         requestAnimationFrame(gameLoop);
     }
 
-    // TODO
-    createAnts(count) {
-        const ants = [];
-        for (let i = 0; i < count; i++) {
-            let ant = new Ant(10, 9);
-            ants.push(ant);
-        }
-        return ants;
-    }
-
-    updateDisplay() {
-        // Clear the previous state of the game grid
-        this.clearGrid();
-
-        // Redraw the ants in their new positions
-        for (let ant of this.ants) {
-            this.drawAnt(ant.x, ant.y);
-        }
-    }
-
-    clearGrid() {
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    }
-
     displayGrid (grid) {
         this.drawGrid(grid);
       }
-
-
 
     loadImage() {
         return Promise.all([
@@ -174,7 +151,7 @@ class GridView {
     drawObjective(i, j, scale) {
         let sx = 0;
         let sy = 0;
-        let offset = 10;
+        let offset = 13;
         this.ctx.drawImage(
             this.KEBAB_IMAGE, 
             sx, sy, 
