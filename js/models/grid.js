@@ -7,17 +7,12 @@ import {Ant} from "./ant.js";
 
 class GridModel {
     constructor() {
-        let free = new Free();
-        let obstacle = new Obstacle();
-        let objective = new Objective();
-        let start = new Start();
-
         // Mapping of numbers to objects
         let objectMapping = {
-            0: free,
-            1: obstacle,
-            2: objective,
-            3: start
+            0: new Free(),
+            1: new Obstacle(),
+            2: new Objective(),
+            3: new Start(),
         };
 
         this.numberGrid = [
@@ -44,6 +39,8 @@ class GridModel {
         this.numberGrid = this.addObjective(this.numberGrid);
         // Convert number grid to object grid
         this.grid = this.numberGrid.map(row => row.map(cell => objectMapping[cell]));
+
+        console.log(this.grid);
     }
 
     addObjective (numberGrid){
