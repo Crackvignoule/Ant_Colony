@@ -1,7 +1,24 @@
-class Ant {
-    // ... autres méthodes et propriétés de la classe Ant
+export class Ant {
+    
+    constructor (x,y){
+        this.x = x;
+        this.y = y;
+    }
 
-    move() {
-        // logique de déplacement de la fourmi
+    move(direction) {
+        switch(direction) {
+            case 'up':
+                this.y -= 1;
+                break;
+            case 'down':
+                this.y += 1;
+                break;
+            case 'left':
+                this.x -= 1;
+                break;
+            case 'right':
+                this.x += 1;
+                break;
+        }
     }
 }

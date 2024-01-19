@@ -15,14 +15,18 @@ SHADOW_IMAGE.src = '../image/shadow.png';
 const KEBAB_IMAGE = new Image();
 KEBAB_IMAGE.src = '../image/kebab.png';
 
+const ANT_IMAGE = new Image();
+ANT_IMAGE.src = '../image/ant.png';
+
 Promise.all([
     new Promise( (resolve) => {START_IMAGE.addEventListener('load', () => { resolve();}); }),
     new Promise( (resolve) => {TREE_IMAGE.addEventListener('load', () => { resolve();}); }),
     new Promise( (resolve) => {SHADOW_IMAGE.addEventListener('load', () => { resolve();}); }),
-    new Promise( (resolve) => {KEBAB_IMAGE.addEventListener('load', () => { resolve();}); })
+    new Promise( (resolve) => {KEBAB_IMAGE.addEventListener('load', () => { resolve();}); }),
+    new Promise( (resolve) => {ANT_IMAGE.addEventListener('load', () => { resolve();}); })
 ])
 .then(() => {
-    const app = new GridController(new GridModel(), new GridView(START_IMAGE, TREE_IMAGE, SHADOW_IMAGE, KEBAB_IMAGE));
+    const app = new GridController(new GridModel(), new GridView(START_IMAGE, TREE_IMAGE, SHADOW_IMAGE, KEBAB_IMAGE, ANT_IMAGE));
 });
 
 
@@ -77,7 +81,7 @@ view.loadImage().then(() => {
 // let seconds = 0;
 // let intervalId = null;
 
-// // Mettre chrono dans MVC pour que les fourmis puissent s'arrêter avec le chrono
+// // // Mettre chrono dans MVC pour que les fourmis puissent s'arrêter avec le chrono
 // document.getElementById('start-button').addEventListener('click', function() {
 //     let button = this;
 

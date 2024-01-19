@@ -1,32 +1,111 @@
+// TODO WE NEED A FUNCTION UPDATE DISPLAY IN THE VIEW
+// TODO REFACTOR IN SEPARATE FUNCTIONS
+// TODO RENAME CLASSES (gridModel -> Model,...)
+
 import {Free} from "../models/free.js";
 import {Obstacle} from "../models/obstacle.js";
 import {Objective} from "../models/objective.js";
 import {Start} from "../models/start.js";
+import {Ant} from "../models/ant.js";
 
 // VIEW SECTION
 class GridView {
-    constructor(START_IMAGE, TREE_IMAGE, SHADOW_IMAGE, KEBAB_IMAGE) {
+    constructor(START_IMAGE, TREE_IMAGE, SHADOW_IMAGE, KEBAB_IMAGE, ANT_IMAGE) {
         this.canvas = document.getElementById('myCanvas');
         this.ctx = this.canvas.getContext('2d');
         this.cellSize = 36; // Taille de chaque tuile dans l'image
-
         this.START_IMAGE = START_IMAGE;
         this.TREE_IMAGE = TREE_IMAGE;
         this.SHADOW_IMAGE = SHADOW_IMAGE;
         this.KEBAB_IMAGE = KEBAB_IMAGE;
-        // this.START_IMAGE = new Image();
-        // this.START_IMAGE.src = '../image/foodAndColony.png'; //35 646
-        // this.TREE_IMAGE =TREE_IMAGE
-        // this.SHADOW_IMAGE = new Image();
-        // this.SHADOW_IMAGE.src = '../image/shadow.png';
-        // this.KEBAB_IMAGE = new Image();
-        // this.KEBAB_IMAGE.src = '../image/kebab.png';
-        //this.initView();
+        this.ANT_IMAGE = ANT_IMAGE;
+        this.ants = [];
+        this.endGame = false;
+        this.initGame();
     }
 
+    initGame() {
+        let button = document.getElementById("start-button");
+        let intervalId = null;
+        let seconds = 0;
+        let minutes = 0;
 
+        this.buttonClickHandler = () => {
+            if (!this.endGame) {
+                this.endGame = true;
+                // Démarrer le jeu
+                button.textContent = 'Stop';
+                button.classList.add('active');
 
-    displayCNF (grid) {
+                // Démarrer le chronomètre
+                intervalId = setInterval(() => {
+                    seconds++;
+                    if (seconds >= 60) {
+                        minutes++;
+                        seconds = 0;
+                    }
+                    document.getElementById('chrono').textContent = 
+                        (minutes < 10 ? '0' : '') + minutes + ':' + 
+                        (seconds < 10 ? '0' : '') + seconds;
+                }, 1000);
+
+               
+                // add ant to the list of ants
+                // this.ants = createAnts(10); // YA UN PB: L AFFICHAGE VA PAS SE METTRE A JOUR APRES LEUR DEPLACEMENT
+                // console.log(this.ants);
+                
+                // move ant 1
+                // this.ants[0].move('down');
+                // // update display
+                // this.updateDisplay();
+                
+                this.startGame(intervalId);
+            } else {
+                // Arrêter le jeu
+                this.endGame = false;
+                button.textContent = 'Start';
+                button.classList.remove('active');
+
+                // Arrêter le chronomètre
+                clearInterval(intervalId);
+
+                console.log("stop");
+            }
+        };
+
+        button.addEventListener('click', this.buttonClickHandler);
+    }
+
+    startGame(intervalId) {
+        const gameLoop = () => {
+            console.log(!this.endGame);
+            if (this.endGame) {
+                console.log("en marche");
+                requestAnimationFrame(gameLoop);
+            }else{
+                console.log("STOOOOP");
+            }
+        };
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    
+    updateDisplay() {
+        // Clear the previous state of the game grid
+        this.clearGrid();
+
+        // Redraw the ants in their new positions
+        for (let ant of this.ants) {
+            this.drawAnt(ant.x, ant.y);
+        }
+    }
+
+    clearGrid() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    displayGrid (grid) {
         this.drawGrid(grid);
       }
 
@@ -100,6 +179,18 @@ class GridView {
         );
     }
 
+    drawAnt(i, j, scale=1) {
+        let sx = 0;
+        let sy = 0;
+        this.ctx.drawImage(
+            this.ANT_IMAGE, 
+            sx, sy, 
+            64, 64,
+            j * this.cellSize, i * this.cellSize, 
+            this.cellSize * scale, this.cellSize * scale
+        );
+    }
+    
     drawBackground(grid) {
     let Offset = 20;
 

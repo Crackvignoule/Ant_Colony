@@ -4,22 +4,17 @@ class GridController {
         this.model = model;
         this.view = view;
 
-        this.bindDisplayCNF = this.bindDisplayCNF.bind(this);
-        this.model.bindDisplayCNF(this.bindDisplayCNF);
+        this.bindDisplayGrid = this.bindDisplayGrid.bind(this);
+        this.model.bindDisplayGrid(this.bindDisplayGrid);
 
-        this.model.getCNF();
+        this.model.getGrid();
     }
     
-    bindDisplayCNF (cnf_value) {
-        this.view.displayCNF(cnf_value);
+    bindDisplayGrid (cnf_value) {
+        this.view.displayGrid(cnf_value);
       }
 
 
-/*
-    displayGrid() {
-        //let grid = this.model.getGrid();
-        this.view.drawGrid(grid);
-    }*/
   }
   
   export default GridController;

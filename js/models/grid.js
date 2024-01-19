@@ -43,18 +43,25 @@ class GridModel {
         // Convert number grid to object grid
         this.grid = this.numberGrid.map(row => row.map(cell => objectMapping[cell]));
     }
+
+    // TODO
+    // createAnts(count) {
+    //     const ants = [];
+    //     for (let i = 0; i < count; i++) {
+    //         let ant = new Ant(10, 9);
+    //         ants.push(ant);
+    //     }
+    //     return ants;
+    // }
   
-    bindDisplayCNF (callback) {
-        this.DisplayCNF = callback;
+    bindDisplayGrid (callback) {
+        this.DisplayGrid = callback;
       }
 
-    getCNF () {
-        this.DisplayCNF(this.grid);
+    getGrid () {
+        this.DisplayGrid(this.grid);
       }
 
-    getGrid() {
-        return this.grid;
-    }
   }
   
   export default GridModel;
