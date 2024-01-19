@@ -44,6 +44,14 @@ class GridModel {
         this.grid = this.numberGrid.map(row => row.map(cell => objectMapping[cell]));
     }
   
+    bindDisplayCNF (callback) {
+        this.DisplayCNF = callback;
+      }
+
+    getCNF () {
+        this.DisplayCNF(this.grid);
+      }
+
     getGrid() {
         return this.grid;
     }

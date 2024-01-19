@@ -5,19 +5,32 @@ import {Start} from "../models/start.js";
 
 // VIEW SECTION
 class GridView {
-    constructor() {
+    constructor(START_IMAGE, TREE_IMAGE, SHADOW_IMAGE, KEBAB_IMAGE) {
         this.canvas = document.getElementById('myCanvas');
         this.ctx = this.canvas.getContext('2d');
         this.cellSize = 36; // Taille de chaque tuile dans l'image
-        this.START_IMAGE = new Image();
-        this.START_IMAGE.src = '../image/foodAndColony.png'; //35 646
-        this.TREE_IMAGE = new Image();
-        this.TREE_IMAGE.src = '../image/tree.png'; 
-        this.SHADOW_IMAGE = new Image();
-        this.SHADOW_IMAGE.src = '../image/shadow.png';
-        this.KEBAB_IMAGE = new Image();
-        this.KEBAB_IMAGE.src = '../image/kebab.png'; 
+
+        this.START_IMAGE = START_IMAGE;
+        this.TREE_IMAGE = TREE_IMAGE;
+        this.SHADOW_IMAGE = SHADOW_IMAGE;
+        this.KEBAB_IMAGE = KEBAB_IMAGE;
+        // this.START_IMAGE = new Image();
+        // this.START_IMAGE.src = '../image/foodAndColony.png'; //35 646
+        // this.TREE_IMAGE =TREE_IMAGE
+        // this.SHADOW_IMAGE = new Image();
+        // this.SHADOW_IMAGE.src = '../image/shadow.png';
+        // this.KEBAB_IMAGE = new Image();
+        // this.KEBAB_IMAGE.src = '../image/kebab.png';
+        //this.initView();
     }
+
+
+
+    displayCNF (grid) {
+        this.drawGrid(grid);
+      }
+
+
 
     loadImage() {
         return Promise.all([
@@ -105,10 +118,10 @@ class GridView {
     
     drawGrid(grid) {
         this.drawBackground(grid);
-        
         for (let i = 0; i < grid.length; i++) {
             for (let j = 0; j < grid[i].length; j++) {
                 let cell = grid[i][j];
+                
                 if (cell instanceof Free) { 
                     // this.drawFree(i, j, 1);
                 } else if (cell instanceof Obstacle) {

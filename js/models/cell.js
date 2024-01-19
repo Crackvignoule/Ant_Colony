@@ -5,5 +5,7 @@ export class Cell {
         this.y = y;
     }
 
+    
+      
     GetType() { return this.constructor.name; }
 }
