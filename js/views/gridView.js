@@ -49,16 +49,11 @@ class GridView {
                         (seconds < 10 ? '0' : '') + seconds;
                 }, 1000);
 
-               
-                // add ant to the list of ants
-                // this.ants = createAnts(10); // YA UN PB: L AFFICHAGE VA PAS SE METTRE A JOUR APRES LEUR DEPLACEMENT
-                // console.log(this.ants);
+                // print gridmodel.ants in the console by using bindings
+                this.ants = this.createAnts(10);
                 
-                // move ant 1
-                // this.ants[0].move('down');
-                // // update display
-                // this.updateDisplay();
-                
+
+
                 this.startGame(intervalId);
             } else {
                 // Arrêter le jeu
@@ -90,7 +85,16 @@ class GridView {
         requestAnimationFrame(gameLoop);
     }
 
-    
+    // TODO
+    createAnts(count) {
+        const ants = [];
+        for (let i = 0; i < count; i++) {
+            let ant = new Ant(10, 9);
+            ants.push(ant);
+        }
+        return ants;
+    }
+
     updateDisplay() {
         // Clear the previous state of the game grid
         this.clearGrid();
@@ -170,11 +174,12 @@ class GridView {
     drawObjective(i, j, scale) {
         let sx = 0;
         let sy = 0;
+        let offset = 10;
         this.ctx.drawImage(
             this.KEBAB_IMAGE, 
             sx, sy, 
             499, 499,
-            j * this.cellSize, i * this.cellSize, 
+            j * this.cellSize+offset, i * this.cellSize+offset, 
             this.cellSize * scale, this.cellSize * scale
         );
     }

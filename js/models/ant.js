@@ -21,4 +21,12 @@ export class Ant {
                 break;
         }
     }
+
+    bindDisplayAnts (callback) {
+        this.DisplayAnts = callback;
+      }
+
+    getAnts () {
+        this.DisplayAnts();
+      }
 }
