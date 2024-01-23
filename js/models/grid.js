@@ -5,40 +5,9 @@ import {Objective} from "./objective.js";
 import {Start} from "./start.js";
 import {Ant} from "./ant.js";
 
-class GridModel {
+export class GridModel {
     constructor() {
-        // Mapping of numbers to objects
-        let objectMapping = {
-            0: new Free(),
-            1: new Obstacle(),
-            2: new Objective(),
-            3: new Start(),
-        };
-
-        this.numberGrid = [
-            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1],
-            [1, 1, 1, 0, 0, 0, 0, 0, 1, 0 ,0, 0, 0, 0, 1, 1, 1, 1],
-            [1, 1, 1, 0, 1, 0, 1, 0, 1, 0 ,1, 0, 1, 0, 0, 0, 0, 1],
-            [1, 0, 0, 0, 1, 0, 1, 0, 1, 0 ,1, 0, 1, 1, 1, 1, 0, 1],
-            [1, 0, 1, 1, 1, 0, 1, 0, 1, 0 ,1, 0, 1, 1, 1, 1, 0, 1],
-            [1, 0, 0, 0, 1, 0, 1, 0, 1, 0 ,1, 0, 0, 0, 0, 0, 0, 1],
-            [1, 1, 1, 0, 1, 0, 1, 0, 0, 0 ,1, 1, 1, 0, 1, 1, 1, 1],
-            [1, 1, 1, 0, 0, 0, 1, 1, 1, 0 ,1, 1, 1, 0, 1, 1, 1, 1],
-            [1, 1, 1, 1, 1, 0, 0, 1, 1, 0 ,0, 0, 0, 0, 1, 1, 1, 1],
-            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0, 1, 1, 0, 1, 1, 1, 1],
-            [1, 0, 1, 1, 1, 1, 1, 1, 0, 3 ,0, 1, 1, 0, 1, 1, 1, 1],
-            [1, 0, 1, 1, 1, 1, 1, 1, 0, 1 ,0, 1, 1, 0, 1, 1, 1, 1],
-            [1, 0, 1, 1, 1, 1, 0, 0, 0, 1 ,0, 0, 0, 0, 1, 1, 1, 1],
-            [1, 0, 1, 1, 1, 1, 0, 1, 0, 1 ,0, 1, 0, 0, 0, 0, 0, 1],
-            [1, 0, 1, 0, 0, 0, 0, 1, 0, 1 ,0, 1, 0, 1, 1, 1, 0, 1],
-            [1, 0, 1, 0, 1, 0, 1, 1, 0, 1 ,0, 1, 0, 0, 0, 0, 0, 1],
-            [1, 0, 0, 0, 1, 0, 1, 1, 0, 0 ,0, 1, 1, 1, 1, 1, 1, 1],
-            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1],
-        ];
-        // add 4 random food
-        this.numberGrid = this.addObjective(this.numberGrid);
-        // Convert number grid to object grid
-        this.grid = this.numberGrid.map(row => row.map(cell => objectMapping[cell]));
+        
     }
 
     addObjective (numberGrid){
@@ -67,14 +36,42 @@ class GridModel {
     return numberGrid;
 }
 
-  
-    bindDisplayGrid (callback) {
-        this.DisplayGrid = callback;
-      }
 
-    getGrid () {
-        this.DisplayGrid(this.grid);
-      }
+    buildGrid () {
+        // Mapping of numbers to objects
+        let objectMapping = {
+            0: new Free(),
+            1: new Obstacle(),
+            2: new Objective(),
+            3: new Start(),
+        };
+
+        let numberGrid = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1],
+            [1, 1, 1, 0, 0, 0, 0, 0, 1, 0 ,0, 0, 0, 0, 1, 1, 1, 1],
+            [1, 1, 1, 0, 1, 0, 1, 0, 1, 0 ,1, 0, 1, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 1, 0, 1, 0, 1, 0 ,1, 0, 1, 1, 1, 1, 0, 1],
+            [1, 0, 1, 1, 1, 0, 1, 0, 1, 0 ,1, 0, 1, 1, 1, 1, 0, 1],
+            [1, 0, 0, 0, 1, 0, 1, 0, 1, 0 ,1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 0, 1, 0, 1, 0, 0, 0 ,1, 1, 1, 0, 1, 1, 1, 1],
+            [1, 1, 1, 0, 0, 0, 1, 1, 1, 0 ,1, 1, 1, 0, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 0, 0, 1, 1, 0 ,0, 0, 0, 0, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0, 1, 1, 0, 1, 1, 1, 1],
+            [1, 0, 1, 1, 1, 1, 1, 1, 0, 3 ,0, 1, 1, 0, 1, 1, 1, 1],
+            [1, 0, 1, 1, 1, 1, 1, 1, 0, 1 ,0, 1, 1, 0, 1, 1, 1, 1],
+            [1, 0, 1, 1, 1, 1, 0, 0, 0, 1 ,0, 0, 0, 0, 1, 1, 1, 1],
+            [1, 0, 1, 1, 1, 1, 0, 1, 0, 1 ,0, 1, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 0, 0, 0, 0, 1, 0, 1 ,0, 1, 0, 1, 1, 1, 0, 1],
+            [1, 0, 1, 0, 1, 0, 1, 1, 0, 1 ,0, 1, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 1, 0, 1, 1, 0, 0 ,0, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1],
+        ];
+        // add 4 random food
+        numberGrid = this.addObjective(numberGrid);
+        // Convert number grid to object grid
+        let grid = numberGrid.map(row => row.map(cell => objectMapping[cell]));
+        return grid;
+    }
 
   }
   

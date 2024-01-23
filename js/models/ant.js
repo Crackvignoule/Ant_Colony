@@ -1,7 +1,8 @@
 export class Ant {
     
     constructor (x,y){
-
+        this.x = x;
+        this.y = y;
         this._startTime     = Date.now();
         this._lag           = 0;
         this._fps           = 60; // Frame rate.
@@ -18,7 +19,7 @@ export class Ant {
             ArcTan2 permet d'obtenir l'angle en radian entre la position actuelle de notre cube et une position donnée (_positionEnd).
             https://fr.wikipedia.org/wiki/Atan2
         */
-        let direction = Math.atan2(-1 * this._positionEnd.y, this._positionEnd.x);
+        let direction = Math.atan2(-1 * this._positionEnd.y - this._position.y, this._positionEnd.x - this._position.x);
         
         /*
             Calculer le vecteur direction:
@@ -31,75 +32,4 @@ export class Ant {
         this._position.y += dy * this._speed / this._fps;
     }
 
-
-    Display() {
-        let x = this._position.x * this._cellSize;
-        let y = this._position.y * this._cellSize;
-        let canvas = document.getElementById('myCanvas');
-        let ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Draw vertical limit line.
-        ctx.beginPath(); // Start a new path
-        ctx.moveTo(100, 0); // Move the pen to (100, 0)
-        ctx.lineTo(100, 100); // Draw a line to (150, 100)
-        ctx.stroke(); // Render the path
-        // Draw horizontal limit line.
-        ctx.beginPath(); // Start a new path
-        ctx.moveTo(0, 100); // Move the pen to (100, 0)
-        ctx.lineTo(100, 100); // Draw a line to (150, 100)
-        ctx.stroke(); // Render the path
-        
-        // Draw a filled square.
-        ctx.fillRect(x, y, 10, 10);
-    }
-
-    Update() {
-        // Compute deltaTime.
-        let currentTime = Date.now();
-        let deltaTime   = currentTime - this._startTime;
-        this._lag += deltaTime;
-        this._startTime = currentTime;
-        this._timer += deltaTime;
-
-        // Update the logic if the lag counter is greater than or equal to the frame duration.
-        while (_lag >= this._frameDuration) {
-            // Update the logic and view.
-            Move(this._frameDuration);
-            Display();
-            // Reduce the lag counter by the frame duration.
-            this._lag -= this._frameDuration;
-        }
-
-        if (this._position.x < 1) {
-            requestAnimationFrame(Update);
-        }
-
-        console.log(this._position, this._timer / 1000);
-    }
-
-    // move(direction) {
-    //     switch(direction) {
-    //         case 'up':
-    //             this.y -= 1;
-    //             break;
-    //         case 'down':
-    //             this.y += 1;
-    //             break;
-    //         case 'left':
-    //             this.x -= 1;
-    //             break;
-    //         case 'right':
-    //             this.x += 1;
-    //             break;
-    //     }
-    // }
-
-    bindDisplayAnts (callback) {
-        this.DisplayAnts = callback;
-      }
-
-    getAnts () {
-        this.DisplayAnts();
-      }
 }

@@ -9,7 +9,7 @@ import {Start} from "../models/start.js";
 import {Ant} from "../models/ant.js";
 
 // VIEW SECTION
-class GridView {
+export class View {
     constructor(START_IMAGE, TREE_IMAGE, SHADOW_IMAGE, KEBAB_IMAGE, ANT_IMAGE) {
         this.canvas = document.getElementById('myCanvas');
         this.ctx = this.canvas.getContext('2d');
@@ -19,10 +19,36 @@ class GridView {
         this.SHADOW_IMAGE = SHADOW_IMAGE;
         this.KEBAB_IMAGE = KEBAB_IMAGE;
         this.ANT_IMAGE = ANT_IMAGE;
-        this.ants = [];
         this.endGame = false;
+        this.ants = [];
+
+        this._startTime = Date.now();
+        this._lag = 0;
+        this._fps = 60; // Frame rate.
+        this._frameDuration = 1000 / this._fps;
+        this._position = {x: 9, y: 10};
+        this._positionEnd = {x: 12, y: 12};
+        this._cellSize = 36; // px.
+        this._speed = 1; // Nous voulons que 1 cellule (de notre grille) soit parcourue en 1 seconde (donc dépendant des FPS fixées car la fonction est appelée à chaque frame). Notre unité de vitesse est donc "le nombre de cellules de la grille parcourues/seconde".
+        this._timer = 0;
+
         this.initGame();
     }
+
+    bindGet (callback) {
+        this.get = callback;
+   }
+
+   display(grid, ants) {
+    // console.log("Dans Display, avant update: ",grid);
+    console.log("Dans Display, après update: ",ants);
+    this.drawGrid(grid);
+
+    // for each ant in ants drawAnt
+    for (let ant of ants) {
+        this.drawAnt(ant.x, ant.y);
+    }
+}
 
     initGame() {
         let button = document.getElementById("start-button");
@@ -50,8 +76,8 @@ class GridView {
                 }, 1000);
 
                 
-                this.getAnts();
-
+                this.getAnts(9,10);
+                this._startTime = Date.now();
                 this.startGame(intervalId);
             } else {
                 // Arrêter le jeu
@@ -71,61 +97,23 @@ class GridView {
 
     startGame(intervalId) {
         const gameLoop = () => {
+            
             if (this.endGame) {
-                //console.log("en marche");
+                console.log("marche");
+                
                 requestAnimationFrame(gameLoop);
             }else{
-                //console.log("STOOOOP");
+                console.log("STOOOOP");
             }
         };
 
         requestAnimationFrame(gameLoop);
     }
 
-    displayGrid (grid) {
-        this.drawGrid(grid);
-      }
+    
 
-    displayAnts (ants, scale=1) {
-        console.log(ants);
-        for (let ant of ants) {
-        let sx = 0;
-        let sy = 0;
-        this.ctx.drawImage(
-            this.ANT_IMAGE, 
-            sx, sy, 
-            64, 64,
-            ant._position.x * this.cellSize, ant._position.y * this.cellSize, 
-            this.cellSize * scale, this.cellSize * scale
-        );
-        this.moveAnts(ants);
-    }    
-}
 
-    moveAnts (ants) {
-        // fonction maths 
-        for (let ant of ants) {
-            ant.x += 1;
-        }
 
-        // animation
-        
-    }
-
-    bindGetAnts (callback) {
-        this.getAnts = callback;
-    }
-
-    loadImage() {
-        return Promise.all([
-            new Promise((resolve) => {
-                this.TREE_IMAGE.addEventListener('load', resolve);
-            }),
-            new Promise((resolve) => {
-                this.SHADOW_IMAGE.addEventListener('load', resolve);
-            })
-        ]);
-    }
 
     drawStart(i, j, scale) {
         let sx = 35; // x-coordinate of the top left corner of the source rectangle
@@ -222,6 +210,16 @@ class GridView {
             }
         }
     }
-}
 
-export default GridView;
+    drawAnt(i, j, scale=1) {
+        let sx = 0;
+        let sy = 0;
+        this.ctx.drawImage(
+            this.ANT_IMAGE, 
+            sx, sy, 
+            64, 64,
+            j * this.cellSize, i * this.cellSize, 
+            this.cellSize * scale, this.cellSize * scale
+        );
+    }
+}

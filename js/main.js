@@ -1,6 +1,6 @@
-import GridModel from './models/grid.js';
-import GridView from './views/View.js';
-import GridController from './controllers/gridController.js';
+import {Environnement} from './models/environnement.js';
+import {View} from './views/View.js';
+import {Controller} from './controllers/Controller.js';
 
 
 const START_IMAGE = new Image();
@@ -26,7 +26,8 @@ Promise.all([
     new Promise( (resolve) => {ANT_IMAGE.addEventListener('load', () => { resolve();}); })
 ])
 .then(() => {
-    const app = new GridController(new GridModel(), new GridView(START_IMAGE, TREE_IMAGE, SHADOW_IMAGE, KEBAB_IMAGE, ANT_IMAGE));
+    const app = new Controller(new Environnement(), new View(START_IMAGE, TREE_IMAGE, SHADOW_IMAGE, KEBAB_IMAGE, ANT_IMAGE));
+    app.play();
 });
 
 
