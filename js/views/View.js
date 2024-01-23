@@ -41,6 +41,7 @@ export class View {
 }
 
     initGame() {
+
         let button = document.getElementById("start-button");
         let intervalId = null;
         let seconds = 0;
@@ -65,9 +66,7 @@ export class View {
                         (seconds < 10 ? '0' : '') + seconds;
                 }, 1000);
 
-                
                 this.get();
-                this._startTime = Date.now();
                 this.startGame(intervalId);
             } else {
                 // Arrêter le jeu

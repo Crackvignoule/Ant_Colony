@@ -10,6 +10,7 @@ export class Environnement {
 
         this._startTime = Date.now();
         this._lag = 0;
+        this._fps = 60; // Frame rate.
         this._frameDuration = 1000 / this._fps;
         this._cellSize = 36;
         this._timer = 0;
@@ -27,10 +28,12 @@ export class Environnement {
       }
 
     FindNewPosition(ant){
-        let x = 10;
-        let y = 10;
+        let val1 = Math.random() * (2 - -2) + -2;
+        let val2 = Math.random() * (2 - -2) + -2;
+        let x = val1 + ant.x;
+        let y = val2 + ant.y;
 
-        return x,y
+        return { x: x, y: y };
     }
 
     get(){
@@ -38,49 +41,39 @@ export class Environnement {
     }
 
     Update(){
-       
-
+        for(let ant of this.ants){
             // Compute deltaTime.
             let currentTime = Date.now();
             let deltaTime   = currentTime - this._startTime;
             this._lag += deltaTime;
             this._startTime = currentTime;
             this._timer += deltaTime;
+    
+            // Calculez la nouvelle position seulement si nécessaire.
+            if (ant.hasReachedDestination()) {
+                console.log("Reached");
+                let coord = this.FindNewPosition(ant);
+                ant.x_end = coord.x;
+                ant.y_end = coord.y;
 
-            // Update the logic if the lag counter is greater than or equal to the frame duration.
+                
+            }
+    
             while (this._lag >= this._frameDuration) {
 
-                for(let ant of this.ants){
-                    let new_x, new_y = this.FindNewPosition(ant);
-                
-                    //On configure les nouvelle valeur de x et de y
-                    ant.x_end = new_x;
-                    ant.y_end = new_y;
-                    
-                    ant.Move(_frameDuration);
-                }
+                // console.log("this._lag : ",this._lag);
+                // console.log("this._frameDuration : ",this._frameDuration);
 
+                ant.Move(this._frameDuration);
+                // console.log("x : ",ant.x, " x_end : ",ant.x_end);
+                // console.log("y : ",ant.y, " y_end : ",ant.y_end);
+                this._lag -= this._frameDuration;
                 this.display(this.grid, this.ants);
-
-                
-                // Reduce the lag counter by the frame duration.
                 this._lag -= this._frameDuration;
             }
-
-            if (new_x < 17) {
-                requestAnimationFrame(Update);
-            }
-
-            // console.log(new_x,new_y, this._timer / 1000);
-
-            
-        
-        
-        
-
-
-
-        
-
+        }
+    
+        requestAnimationFrame(this.Update.bind(this));
     }
-}
+    
+    }
