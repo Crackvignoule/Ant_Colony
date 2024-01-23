@@ -44,8 +44,6 @@ export class Environnement {
             if (ant.hasReachedDestination()) {
                 console.log("Reached");
                 let coord = ant.FindNewPosition();
-                ant.x_end = coord.x;
-                ant.y_end = coord.y;
             }
     
             while (this._lag >= this._frameDuration) {

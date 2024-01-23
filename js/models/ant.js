@@ -29,7 +29,8 @@ export class Ant {
         let x = val1 + this.x;
         let y = val2 + this.y;
 
-        return { x: x, y: y };
+        this.x_end = x;
+        this.y_end = y;
         // // Directions possibles (only free cell are possible)
         
 
