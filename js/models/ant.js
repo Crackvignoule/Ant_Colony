@@ -1,3 +1,5 @@
+import { Free } from "./free.js";
+
 export class Ant {
     
     constructor (x,y){
@@ -22,46 +24,54 @@ export class Ant {
         return distance < 0.1; // Définissez un seuil de proximité approprié
     }
     
-    FindNewPosition(){
-        let x, y;
-        do {
-            let val1 = Math.random() * 2 - 1; // donne une valeur entre -1 et 1
-            let val2 = Math.random() * 2 - 1; // donne une valeur entre -1 et 1
-            x = val1 + this.x;
-            y = val2 + this.y;
-        } while (!((x > 0) && (x < 18) && (y > 0) && (y < 18)));
+    FindNewPosition(grid){
+        // let x, y;
+        // do {
+        //     let val1 = Math.random() * 2 - 1; // donne une valeur entre -1 et 1
+        //     let val2 = Math.random() * 2 - 1; // donne une valeur entre -1 et 1
+        //     x = val1 + this.x;
+        //     y = val2 + this.y;
+        // } while (!((x > 0) && (x < 18) && (y > 0) && (y < 18)));
         
-        this.x_end = x;
-        this.y_end = y;
+        // this.x_end = x;
+        // this.y_end = y;
     
     
 
-        // // Directions possibles (only free cell are possible)
+        // Directions possibles (only free cell are possible)
         
+        // Si aucun pheromones n'est détecté, on choisit une direction aléatoire
+        // Sinon, on choisit la direction avec le plus de pheromones
+        // Si plusieurs directions ont le même nombre de pheromones, on choisit aléatoirement parmi ces directions
 
+        let directions = ['up', 'down', 'left', 'right'];
+        let maxIntensity = 0;
+        let maxDirections = [];
+        for (let direction of directions) {
+            let intensity = this.getIntensity(direction, grid);
+            if (intensity > maxIntensity) {
+                maxIntensity = intensity;
+                maxDirections = [direction];
+            } else if (intensity === maxIntensity) {
+                maxDirections.push(direction);
+            }
+        }
+        console.log(this.x_end,this.y_end,maxDirections);
+        let randomIndex = Math.floor(Math.random() * maxDirections.length);
+        let newDirection = maxDirections[randomIndex];
+        this.direction = newDirection;
 
-        // // Calculer la probabilité pour chaque direction
-        // let probabilities = directions.map(direction => {
-        //     let intensity = this.getIntensity(direction);
-        //     return Math.pow(intensity, alpha) * Math.pow(1, beta); // visibilité est toujours 1
-        // });
+        // Définir x_end et y_end en fonction de la direction choisie
+        switch(newDirection) {
+            case 'up': this.y_end = this.y_end - 1; break;
+            case 'down': this.y_end = this.y_end + 1; break;
+            case 'left': this.x_end = this.x_end - 1; break;
+            case 'right': this.x_end = this.x_end + 1; break;
+        }
 
-        // // Normaliser les probabilités pour qu'elles somment à 1
-        // let sum = probabilities.reduce((a, b) => a + b, 0);
-        // probabilities = probabilities.map(prob => prob / sum);
-
-        // // Ajouter une probabilité d'exploration
-        // probabilities = probabilities.map(prob => prob * (1 - gamma));
-        // probabilities.push(gamma);
-
-        // // Choisir une direction en fonction des probabilités
-        // let chosenDirection = this.chooseDirection(probabilities);
-
-        // // Mettre à jour la position
-        // this.updatePosition(chosenDirection);
     }
 
-    getIntensity(direction) {
+    getIntensity(direction, grid) {
         let dx = 0, dy = 0;
         switch(direction) {
             case 'up': dy = -1; break;
@@ -69,15 +79,20 @@ export class Ant {
             case 'left': dx = -1; break;
             case 'right': dx = 1; break;
         }
-        let newX = this.x + dx;
-        let newY = this.y + dy;
+        let newX = this.x_end + dx;
+        let newY = this.y_end + dy;
     
         // Ensure the new position is within the bounds of the grid
-        if(newX < 0 || newX >= this.grid[0].length || newY < 0 || newY >= this.grid.length) {
-            return 0;
+        if(newX < 0 || newX >= 18 || newY < 0 || newY >= 18) {
+            return -1;
         }
-    
-        return this.grid[newY][newX]._qty;
+        
+        // ensure the new position is free
+        if(!(grid[newY][newX] instanceof Free)) {
+            return -1;
+        }
+       
+        return grid[newY][newX]._qty;
     }
 
 }

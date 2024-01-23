@@ -43,6 +43,7 @@ export class View {
     displayStart(grid) {
         this.drawGrid(grid);
     }
+    
     initGame() {
 
         let button = document.getElementById("start-button");

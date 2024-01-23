@@ -48,7 +48,7 @@ export class Environnement {
         if (this._lag >= this._frameDuration) {
             for (let ant of this.ants) {
                 if (ant.hasReachedDestination()) {
-                    ant.FindNewPosition();
+                    ant.FindNewPosition(this.grid);
                 }
                 ant.Move(this._frameDuration);
             }
