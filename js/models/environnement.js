@@ -17,7 +17,7 @@ export class Environnement {
     }
 
     createAnts(){
-        for (let i=0; i<1; i++){
+        for (let i=0; i<3; i++){
             let ant = new Ant(10,9);
             this.ants.push(ant);
         }
@@ -32,35 +32,25 @@ export class Environnement {
     }
 
     Update(){
-        for(let ant of this.ants){
-            // Compute deltaTime.
-            let currentTime = Date.now();
-            let deltaTime   = currentTime - this._startTime;
-            this._lag += deltaTime;
-            this._startTime = currentTime;
-            this._timer += deltaTime;
+        let currentTime = Date.now();
+        let deltaTime = currentTime - this._startTime;
+        this._lag += deltaTime;
+        this._startTime = currentTime;
     
-            // Calculez la nouvelle position seulement si nécessaire.
-            if (ant.hasReachedDestination()) {
-                console.log("Reached");
-                ant.FindNewPosition();
-            }
-    
-            while (this._lag >= this._frameDuration) {
-
-                // console.log("this._lag : ",this._lag);
-                // console.log("this._frameDuration : ",this._frameDuration);
-
+        if (this._lag >= this._frameDuration) {
+            for (let ant of this.ants) {
+                if (ant.hasReachedDestination()) {
+                    ant.FindNewPosition();
+                }
                 ant.Move(this._frameDuration);
-                // console.log("x : ",ant.x, " x_end : ",ant.x_end);
-                // console.log("y : ",ant.y, " y_end : ",ant.y_end);
-                this._lag -= this._frameDuration;
-                this.display(this.grid, this.ants);
-                this._lag -= this._frameDuration;
             }
+    
+            this._lag -= this._frameDuration;
+            this.display(this.grid, this.ants);
         }
     
         requestAnimationFrame(this.Update.bind(this));
     }
+    
     
     }

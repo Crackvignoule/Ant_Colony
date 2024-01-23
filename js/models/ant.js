@@ -6,7 +6,7 @@ export class Ant {
         this._fps = 60; // Frame rate.
         this.x_end = x;
         this.y_end = y;
-        this._speed = 1;
+        this._speed = 2;
     }
 
     Move(durationFrame) {
@@ -23,14 +23,19 @@ export class Ant {
     }
     
     FindNewPosition(){
-
-        let val1 = Math.random() * (2 - -2) + -2;
-        let val2 = Math.random() * (2 - -2) + -2;
-        let x = val1 + this.x;
-        let y = val2 + this.y;
-
+        let x, y;
+        do {
+            let val1 = Math.random() * 2 - 1; // donne une valeur entre -1 et 1
+            let val2 = Math.random() * 2 - 1; // donne une valeur entre -1 et 1
+            x = val1 + this.x;
+            y = val2 + this.y;
+        } while (!((x > 0) && (x < 18) && (y > 0) && (y < 18)));
+        
         this.x_end = x;
         this.y_end = y;
+    
+    
+
         // // Directions possibles (only free cell are possible)
         
 
