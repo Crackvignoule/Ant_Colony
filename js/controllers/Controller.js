@@ -10,12 +10,15 @@ export class Controller {
         this.bindDisplay = this.bindDisplay.bind(this);
         this.modelEnv.bindDisplay(this.bindDisplay);
 
+        this.bindDisplayStart = this.bindDisplayStart.bind(this);
+        this.modelEnv.bindDisplayStart(this.bindDisplayStart);
+
         this.bindGet = this.bindGet.bind(this);
         this.view.bindGet(this.bindGet);
+
     }
 
     bindDisplay(grid, ants) {
-      // Appel de la méthode display de la vue avec les valeurs reçues
       this.view.display(grid, ants);
   }
 
@@ -23,7 +26,11 @@ export class Controller {
       this.modelEnv.get();
     }
 
+    bindDisplayStart(grid) {
+      this.view.displayStart(grid);
+  }
+
     play(){
-      this.modelEnv.Update();
+      this.modelEnv.UpdateStart();
     }
   }

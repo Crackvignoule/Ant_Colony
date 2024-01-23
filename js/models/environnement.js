@@ -27,8 +27,16 @@ export class Environnement {
         this.display = callback;
       }
 
+    bindDisplayStart (callback) {
+        this.displayStart = callback;
+    }
+
     get(){
         this.Update();
+    }
+
+    UpdateStart(){
+        this.displayStart(this.grid);
     }
 
     Update(){
@@ -49,7 +57,7 @@ export class Environnement {
             this.display(this.grid, this.ants);
         }
     
-        requestAnimationFrame(this.Update.bind(this));
+        //requestAnimationFrame(this.Update.bind(this));
     }
     
     

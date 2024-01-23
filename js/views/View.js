@@ -31,15 +31,18 @@ export class View {
         this.get = callback;
    }
 
-   display(grid, ants) {
+    display(grid, ants) {
     this.drawGrid(grid);
 
     // for each ant in ants drawAnt
     for (let ant of ants) {
         this.drawAnt(ant.x, ant.y);
     }
-}
+    }
 
+    displayStart(grid) {
+        this.drawGrid(grid);
+    }
     initGame() {
 
         let button = document.getElementById("start-button");
@@ -66,7 +69,7 @@ export class View {
                         (seconds < 10 ? '0' : '') + seconds;
                 }, 1000);
 
-                this.get();
+                
                 this.startGame(intervalId);
             } else {
                 // Arrêter le jeu
@@ -89,7 +92,7 @@ export class View {
             
             if (this.endGame) {
                 console.log("marche");
-                
+                this.get();
                 requestAnimationFrame(gameLoop);
             }else{
                 console.log("STOOOOP");
