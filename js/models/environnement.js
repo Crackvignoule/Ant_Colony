@@ -43,7 +43,7 @@ export class Environnement {
             // Calculez la nouvelle position seulement si nécessaire.
             if (ant.hasReachedDestination()) {
                 console.log("Reached");
-                let coord = ant.FindNewPosition();
+                ant.FindNewPosition();
             }
     
             while (this._lag >= this._frameDuration) {
