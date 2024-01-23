@@ -27,15 +27,6 @@ export class Environnement {
         this.display = callback;
       }
 
-    FindNewPosition(ant){
-        let val1 = Math.random() * (2 - -2) + -2;
-        let val2 = Math.random() * (2 - -2) + -2;
-        let x = val1 + ant.x;
-        let y = val2 + ant.y;
-
-        return { x: x, y: y };
-    }
-
     get(){
         this.Update();
     }
@@ -52,11 +43,9 @@ export class Environnement {
             // Calculez la nouvelle position seulement si nécessaire.
             if (ant.hasReachedDestination()) {
                 console.log("Reached");
-                let coord = this.FindNewPosition(ant);
+                let coord = ant.FindNewPosition();
                 ant.x_end = coord.x;
                 ant.y_end = coord.y;
-
-                
             }
     
             while (this._lag >= this._frameDuration) {
