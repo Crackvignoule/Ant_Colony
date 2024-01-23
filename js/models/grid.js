@@ -39,8 +39,6 @@ class GridModel {
         this.numberGrid = this.addObjective(this.numberGrid);
         // Convert number grid to object grid
         this.grid = this.numberGrid.map(row => row.map(cell => objectMapping[cell]));
-
-        console.log(this.grid);
     }
 
     addObjective (numberGrid){

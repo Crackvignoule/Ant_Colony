@@ -49,13 +49,8 @@ class GridView {
                         (seconds < 10 ? '0' : '') + seconds;
                 }, 1000);
 
-                // TODO
-                // print gridmodel.ants in the console by using bindings
-                this.ants = this.createAnts(10);
-                // move ant
-                this.ants[0].move('right'); // x and y are updated
-                // update display (move ant animation)
-                this.drawAnt(this.ants[0].y, this.ants[0].x);
+                
+                this.getAnts();
 
                 this.startGame(intervalId);
             } else {
@@ -76,12 +71,11 @@ class GridView {
 
     startGame(intervalId) {
         const gameLoop = () => {
-            console.log(!this.endGame);
             if (this.endGame) {
-                console.log("en marche");
+                //console.log("en marche");
                 requestAnimationFrame(gameLoop);
             }else{
-                console.log("STOOOOP");
+                //console.log("STOOOOP");
             }
         };
 
@@ -91,6 +85,36 @@ class GridView {
     displayGrid (grid) {
         this.drawGrid(grid);
       }
+
+    displayAnts (ants, scale=1) {
+        console.log(ants);
+        for (let ant of ants) {
+        let sx = 0;
+        let sy = 0;
+        this.ctx.drawImage(
+            this.ANT_IMAGE, 
+            sx, sy, 
+            64, 64,
+            ant._position.x * this.cellSize, ant._position.y * this.cellSize, 
+            this.cellSize * scale, this.cellSize * scale
+        );
+        this.moveAnts(ants);
+    }    
+}
+
+    moveAnts (ants) {
+        // fonction maths 
+        for (let ant of ants) {
+            ant.x += 1;
+        }
+
+        // animation
+        
+    }
+
+    bindGetAnts (callback) {
+        this.getAnts = callback;
+    }
 
     loadImage() {
         return Promise.all([
@@ -157,18 +181,6 @@ class GridView {
             sx, sy, 
             499, 499,
             j * this.cellSize+offset, i * this.cellSize+offset, 
-            this.cellSize * scale, this.cellSize * scale
-        );
-    }
-
-    drawAnt(i, j, scale=1) {
-        let sx = 0;
-        let sy = 0;
-        this.ctx.drawImage(
-            this.ANT_IMAGE, 
-            sx, sy, 
-            64, 64,
-            j * this.cellSize, i * this.cellSize, 
             this.cellSize * scale, this.cellSize * scale
         );
     }
