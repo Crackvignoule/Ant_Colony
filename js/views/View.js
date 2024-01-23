@@ -22,15 +22,7 @@ export class View {
         this.endGame = false;
         this.ants = [];
 
-        this._startTime = Date.now();
-        this._lag = 0;
-        this._fps = 60; // Frame rate.
-        this._frameDuration = 1000 / this._fps;
-        this._position = {x: 9, y: 10};
-        this._positionEnd = {x: 12, y: 12};
-        this._cellSize = 36; // px.
-        this._speed = 1; // Nous voulons que 1 cellule (de notre grille) soit parcourue en 1 seconde (donc dépendant des FPS fixées car la fonction est appelée à chaque frame). Notre unité de vitesse est donc "le nombre de cellules de la grille parcourues/seconde".
-        this._timer = 0;
+        
 
         this.initGame();
     }
@@ -40,8 +32,6 @@ export class View {
    }
 
    display(grid, ants) {
-    // console.log("Dans Display, avant update: ",grid);
-    console.log("Dans Display, après update: ",ants);
     this.drawGrid(grid);
 
     // for each ant in ants drawAnt
@@ -76,7 +66,7 @@ export class View {
                 }, 1000);
 
                 
-                this.getAnts(9,10);
+                this.get();
                 this._startTime = Date.now();
                 this.startGame(intervalId);
             } else {

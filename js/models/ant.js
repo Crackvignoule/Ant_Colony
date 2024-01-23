@@ -3,15 +3,10 @@ export class Ant {
     constructor (x,y){
         this.x = x;
         this.y = y;
-        this._startTime     = Date.now();
-        this._lag           = 0;
         this._fps           = 60; // Frame rate.
-        this._frameDuration = 1000 / this._fps;
-        this._position      = {x: x, y: y};
-        this._positionEnd   = {x: 1, y: 1};
-        this._cellSize      = 100; // px.
+        this.x_end = x;
+        this.y_end = y;
         this._speed         = 1;
-        this._timer         = 0;
     }
 
     Move(durationFrame) {
@@ -19,7 +14,7 @@ export class Ant {
             ArcTan2 permet d'obtenir l'angle en radian entre la position actuelle de notre cube et une position donnée (_positionEnd).
             https://fr.wikipedia.org/wiki/Atan2
         */
-        let direction = Math.atan2(-1 * this._positionEnd.y - this._position.y, this._positionEnd.x - this._position.x);
+        let direction = Math.atan2(-1 * this.y_end - this.y, this.x_end - this.x);
         
         /*
             Calculer le vecteur direction:

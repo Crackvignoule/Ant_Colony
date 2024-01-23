@@ -13,15 +13,16 @@ export class Controller {
         this.bindGet = this.bindGet.bind(this);
         this.view.bindGet(this.bindGet);
     }
-    
-    bindDisplay (cnf_value) {
-        this.view.display(cnf_value);
-      }
+
+    bindDisplay(grid, ants) {
+      // Appel de la méthode display de la vue avec les valeurs reçues
+      this.view.display(grid, ants);
+  }
 
     bindGet () {
       this.modelEnv.get();
     }
-    
+
     play(){
       this.modelEnv.Update();
     }
