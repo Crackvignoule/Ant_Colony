@@ -1,4 +1,6 @@
 import { Free } from "./free.js";
+import { Objective } from "./objective.js";
+import { Start } from "./start.js";
 
 export class Ant {
     
@@ -54,6 +56,8 @@ export class Ant {
                 maxDirections = [direction];
             } else if (intensity === maxIntensity) {
                 maxDirections.push(direction);
+            }else if (intensity == -2){
+                //traitement
             }
         }
         console.log(this.x_end,this.y_end,maxDirections);
@@ -87,10 +91,15 @@ export class Ant {
             return -1;
         }
         
+        if((grid[newX][newY] instanceof Objective)){
+            return -2;
+        }
+
         // ensure the new position is free
-        if(!(grid[newY][newX] instanceof Free)) {
+        if(!(grid[newX][newY] instanceof Free) && !(grid[newX][newY] instanceof Start)) {
             return -1;
         }
+        
        
         return grid[newY][newX]._qty;
     }
