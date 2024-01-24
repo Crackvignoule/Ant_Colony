@@ -195,7 +195,7 @@ export class View {
                     this.drawObstacle(i, j, 1.5);
                 }
                 else if (cell instanceof Objective) { 
-                    this.drawObjective(i, j, 1);
+                    this.drawObjective(i, j, 1.1);
                 }
                 else if (cell instanceof Start) { 
                     this.drawStart(i, j, 1);

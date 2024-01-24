@@ -1,5 +1,6 @@
-import { Free } from "./free.js";
+// import { Free } from "./free.js";
 import { Objective } from "./objective.js";
+import { Obstacle } from "./obstacle.js";
 import { Start } from "./start.js";
 
 export class Ant {
@@ -41,67 +42,58 @@ export class Ant {
     
 
         // Directions possibles (only free cell are possible)
-        
+        // si ya de la bouffe on y va (si ya plusieurs bouffe on y va au hasard)
         // Si aucun pheromones n'est détecté, on choisit une direction aléatoire
-        // Sinon, on choisit la direction avec le plus de pheromones
         // Si plusieurs directions ont le même nombre de pheromones, on choisit aléatoirement parmi ces directions
+        // gamma est ajouté aux cases sans pheromones pour éviter qu'elles ne soient jamais choisies
+        let gamma = 0.5;
 
-        let directions = ['up', 'down', 'left', 'right'];
-        let maxIntensity = 0;
-        let maxDirections = [];
+        let directions = [
+            [-1, 0], // up
+            [1, 0], // down
+            [0, -1], // left
+            [0, 1] // right
+        ];
+    
+        let probabilities = [];
+        let sumOfProbas = 0;
+    
         for (let direction of directions) {
-            let intensity = this.getIntensity(direction, grid);
-            if (intensity > maxIntensity) {
-                maxIntensity = intensity;
-                maxDirections = [direction];
-            } else if (intensity === maxIntensity) {
-                maxDirections.push(direction);
-            }else if (intensity == -2){
-                //traitement
+            let newX = this.x_end + direction[0];
+            let newY = this.y_end + direction[1];
+    
+            // Check if the new position is within the grid and not an obstacle nor the start cell
+            if (newX >= 0 && newX < grid.length && newY >= 0 && newY < grid[0].length && !(grid[newX][newY] instanceof Obstacle) && !(grid[newX][newY] instanceof Start)) {
+                let proba = (gamma + grid[newX][newY]._qty);
+                if (grid[newX][newY] instanceof Objective) {
+                    proba = Infinity; // If the cell is food, we want to go there for sure
+                }
+                console.log(proba, grid[newX][newY]);
+                probabilities.push(proba);
+                sumOfProbas += proba;
+            } else {
+                probabilities.push(0);
             }
         }
-        console.log(this.x_end,this.y_end,maxDirections);
-        let randomIndex = Math.floor(Math.random() * maxDirections.length);
-        let newDirection = maxDirections[randomIndex];
-        this.direction = newDirection;
 
-        // Définir x_end et y_end en fonction de la direction choisie
-        switch(newDirection) {
-            case 'up': this.y_end = this.y_end - 1; break;
-            case 'down': this.y_end = this.y_end + 1; break;
-            case 'left': this.x_end = this.x_end - 1; break;
-            case 'right': this.x_end = this.x_end + 1; break;
+        // Normalize probabilities
+        if (sumOfProbas === Infinity) {
+            // If sumOfProbas is Infinity, set the probability of the objective cell to 1 and all other probabilities to 0
+            probabilities = probabilities.map(proba => proba === Infinity ? 1 : 0);
+        } else {
+            probabilities = probabilities.map(proba => proba / sumOfProbas);
         }
-
+    
+        // Choose a direction based on the probabilities
+        let r = Math.random();
+        let index = probabilities.findIndex((proba, i) => (r -= proba) < 0);
+        
+        // console.log(index,directions);
+        this.x_end += directions[index][0]
+        this.y_end += directions[index][1]
     }
 
     getIntensity(direction, grid) {
-        let dx = 0, dy = 0;
-        switch(direction) {
-            case 'up': dy = -1; break;
-            case 'down': dy = 1; break;
-            case 'left': dx = -1; break;
-            case 'right': dx = 1; break;
-        }
-        let newX = this.x_end + dx;
-        let newY = this.y_end + dy;
-    
-        // Ensure the new position is within the bounds of the grid
-        if(newX < 0 || newX >= 18 || newY < 0 || newY >= 18) {
-            return -1;
-        }
-        
-        if((grid[newX][newY] instanceof Objective)){
-            return -2;
-        }
-
-        // ensure the new position is free
-        if(!(grid[newX][newY] instanceof Free) && !(grid[newX][newY] instanceof Start)) {
-            return -1;
-        }
-        
-       
-        return grid[newY][newX]._qty;
     }
 
 }
