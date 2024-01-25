@@ -23,7 +23,7 @@ export class Ant {
             this.x_end = nextPosition.x;
             this.y_end = nextPosition.y;
         }
-        
+
         let direction = Math.atan2(this.y_end - this.y, this.x_end - this.x);
         let dx = Math.cos(direction);
         let dy = Math.sin(direction);
@@ -70,7 +70,6 @@ export class Ant {
                 if (grid[newX][newY] instanceof Objective) {
                     proba = Infinity; // If the cell is food, we want to go there for sure
                 }
-                console.log(proba, grid[newX][newY]);
                 probabilities.push(proba);
                 sumOfProbas += proba;
             } else {
@@ -90,57 +89,142 @@ export class Ant {
         let r = Math.random();
         let index = probabilities.findIndex((proba, i) => (r -= proba) < 0);
         
-        // console.log(index,directions);
         this.x_end += directions[index][0]
         this.y_end += directions[index][1]
         this.positions.push({x:this.x_end,y:this.y_end});
-        console.log(this.positions);
     }
 
-    getIntensity(direction, grid) {
-    }
+    drop_pheromones(grid){
+        // calculate qty of dropped pheromones
+        // qty = Q / length of path at k iteration
+        // by doing so, the closer the cells are to the food, the higher the qty of pheromones are
 
+        let Q = 1; // constant
+        let path = this.positions;
+        let qty = Q / path.length;
+
+        // for (let cell of path){
+        //     grid[cell.x][cell.y]._qty += qty;
+        // }
+    }
 
 
     aStar_path_finding(grid, start, goal) {
+        let startKey = `${start.x},${start.y}`;
+        let goalKey = `${goal.x},${goal.y}`;
+    
         // Initialisez les ensembles openSet, closedSet et les scores g et f
-        let openSet = new Set([start]);
+        let openSet = new Set([startKey]);
         let closedSet = new Set();
         let gScore = {}; // Coût depuis le départ
         let fScore = {}; // Coût total estimé
-        gScore[start] = 0;
-        fScore[start] = this.heuristic(start, goal);
-
+        gScore[startKey] = 0;
+        fScore[startKey] = this.heuristic(start, goal);
+    
         let cameFrom = new Map();
-
+    
         while (openSet.size > 0) {
-            let current = this.getLowestFScore(openSet, fScore);
-            if (current.x === goal.x && current.y === goal.y) {
-                return this.reconstructPath(cameFrom, current);
+            let currentKey = this.getLowestFScore(openSet, fScore);
+    
+            if (currentKey === goalKey) {
+                return this.reconstructPath(cameFrom, currentKey);
             }
+            if (typeof currentKey !== 'string') {
+                continue;
+            }
+    
+            
 
-            openSet.delete(current);
-            closedSet.add(current);
-
+            openSet.delete(currentKey);
+            closedSet.add(currentKey);
+            let currentParts = currentKey.split(',');
+            let current = { x: parseInt(currentParts[0]), y: parseInt(currentParts[1]) };
+    
             for (let neighbor of this.getNeighbors(current, grid)) {
-                if (closedSet.has(neighbor)) continue;
-
-                let tentativeGScore = gScore[current] + this.distBetween(current, neighbor);
-                if (!openSet.has(neighbor)) openSet.add(neighbor);
-                else if (tentativeGScore >= gScore[neighbor]) continue;
-
-                cameFrom.set(neighbor, current);
-                gScore[neighbor] = tentativeGScore;
-                fScore[neighbor] = gScore[neighbor] + this.heuristic(neighbor, goal);
+                let neighborKey = `${neighbor.x},${neighbor.y}`;
+    
+                if (closedSet.has(neighborKey)) continue;
+    
+                let tentativeGScore = gScore[currentKey] + this.distBetween(current, neighbor);
+    
+                if (!openSet.has(neighborKey)) openSet.add(neighborKey);
+                else if (tentativeGScore >= (gScore[neighborKey] || Infinity)) continue;
+    
+                cameFrom.set(neighborKey, currentKey);
+                gScore[neighborKey] = tentativeGScore;
+                fScore[neighborKey] = gScore[neighborKey] + this.heuristic(neighbor, goal);
             }
         }
-
+    
         return []; // Aucun chemin trouvé
     }
+    
+    
 
     // Méthodes supplémentaires nécessaires pour l'A*
     // getLowestFScore, heuristic, getNeighbors, distBetween, reconstructPath
 
+    getLowestFScore(openSet, fScore) {
+        let lowestKey = null;
+        let lowestFScore = Infinity;
+    
+        openSet.forEach(nodeKey => {
+            let score = fScore[nodeKey];
+            if (score < lowestFScore) {
+                lowestFScore = score;
+                lowestKey = nodeKey;
+            }
+        });
+    
+        return lowestKey; // Devrait être une chaîne de caractères
+    }
+    
+    
+    
+    // Dans aStar_path_finding et partout où vous utilisez cameFrom, gScore, et fScore:
+    // Convertissez les coordonnées en chaîne de caractères avant de les utiliser comme clés.
+    // Par exemple:
+    // let nodeKey = `${current.x},${current.y}`;
+    // gScore[nodeKey] = ...
+    
+    reconstructPath(cameFrom, current) {
+        let totalPath = [current];
+        let currentKey = `${current.x},${current.y}`;
+    
+        while (cameFrom.has(currentKey)) {
+            let cameFromKey = cameFrom.get(currentKey);
+            let [x, y] = cameFromKey.split(",").map(Number);
+            current = { x, y };
+            totalPath.unshift(current);
+            currentKey = cameFromKey;
+        }
+    
+        return totalPath;
+    }
+    
+    heuristic(start, goal) {
+        return Math.sqrt(Math.pow(start.x - goal.x, 2) + Math.pow(start.y - goal.y, 2));
+    }
+    
+    getNeighbors(node, grid) {
+        let neighbors = [];
+        let directions = [[-1, 0], [1, 0], [0, -1], [0, 1]]; // haut, bas, gauche, droite
+    
+        directions.forEach(dir => {
+            let newX = node.x + dir[0];
+            let newY = node.y + dir[1];
+    
+            if (newX >= 0 && newX < grid.length && newY >= 0 && newY < grid[0].length && !(grid[newX][newY] instanceof Obstacle)) {
+                neighbors.push({ x: newX, y: newY });
+            }
+        });
+    
+        return neighbors;
+    }
+
+    distBetween(current, neighbor) {
+        return 1; // Distance constante pour grille simplifiée
+    }
 
     return_to_start(grid, startPoint) {
         // startPoint est le point de départ initial de la fourmi
@@ -149,17 +233,13 @@ export class Ant {
         // Utiliser A* pour trouver le chemin du point actuel au point de départ
         let path = this.aStar_path_finding(grid, { x: this.x, y: this.y }, goal);
         if (path.length > 0) {
-            // Suivre le chemin pour retourner au point de départ
             this.followPath(path);
         }
     }
     
     followPath(path) {
-        // Suivre le chemin donné (peut être implémenté de différentes manières)
-        // Exemple : définir le prochain point du chemin comme destination immédiate
-        let nextStep = path[0];
-        this.x_end = nextStep.x;
-        this.y_end = nextStep.y;
+        // Mise à jour de this.positions avec le chemin entier
+        this.positions = path.slice(); // Copie du chemin
     }
 
 }

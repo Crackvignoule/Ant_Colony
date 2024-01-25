@@ -104,11 +104,11 @@ export class View {
         const gameLoop = () => {
             
             if (this.endGame) {
-                console.log("marche");
+                // console.log("marche");
                 this.get();
                 requestAnimationFrame(gameLoop);
             }else{
-                console.log("STOOOOP");
+                // console.log("STOOOOP");
             }
         };
 
