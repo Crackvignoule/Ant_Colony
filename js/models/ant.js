@@ -12,6 +12,7 @@ export class Ant {
         this.x_end = x;
         this.y_end = y;
         this._speed = 2;
+        this.positions = [{x:this.x_end,y:this.y_end}];
     }
 
     Move(durationFrame) {
@@ -91,6 +92,7 @@ export class Ant {
         // console.log(index,directions);
         this.x_end += directions[index][0]
         this.y_end += directions[index][1]
+        this.positions.push({x:this.x_end,y:this.y_end});
     }
 
     getIntensity(direction, grid) {
