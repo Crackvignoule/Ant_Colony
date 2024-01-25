@@ -16,7 +16,7 @@ export class Ant {
     }
 
     Move(durationFrame) {
-
+        // TODO CHECK YA UN TRUC BIZARRE
         if (this.positions.length > 0) {
             // Si la fourmi a un chemin à suivre dans positions
             let nextPosition = this.positions.shift(); // Prendre le prochain point
