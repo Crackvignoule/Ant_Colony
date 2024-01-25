@@ -16,6 +16,14 @@ export class Ant {
     }
 
     Move(durationFrame) {
+
+        if (this.positions.length > 0) {
+            // Si la fourmi a un chemin à suivre dans positions
+            let nextPosition = this.positions.shift(); // Prendre le prochain point
+            this.x_end = nextPosition.x;
+            this.y_end = nextPosition.y;
+        }
+        
         let direction = Math.atan2(this.y_end - this.y, this.x_end - this.x);
         let dx = Math.cos(direction);
         let dy = Math.sin(direction);
@@ -29,24 +37,17 @@ export class Ant {
     }
     
     FindNewPosition(grid){
-        // let x, y;
-        // do {
-        //     let val1 = Math.random() * 2 - 1; // donne une valeur entre -1 et 1
-        //     let val2 = Math.random() * 2 - 1; // donne une valeur entre -1 et 1
-        //     x = val1 + this.x;
-        //     y = val2 + this.y;
-        // } while (!((x > 0) && (x < 18) && (y > 0) && (y < 18)));
-        
-        // this.x_end = x;
-        // this.y_end = y;
-    
-    
-
         // Directions possibles (only free cell are possible)
         // si ya de la bouffe on y va (si ya plusieurs bouffe on y va au hasard)
         // Si aucun pheromones n'est détecté, on choisit une direction aléatoire
         // Si plusieurs directions ont le même nombre de pheromones, on choisit aléatoirement parmi ces directions
         // gamma est ajouté aux cases sans pheromones pour éviter qu'elles ne soient jamais choisies
+
+        if (grid[this.x_end][this.y_end] instanceof Objective){
+            this.return_to_start(grid,{x:10,y:9});
+            return;
+        }
+        
         let gamma = 0.5;
 
         let directions = [
@@ -93,9 +94,72 @@ export class Ant {
         this.x_end += directions[index][0]
         this.y_end += directions[index][1]
         this.positions.push({x:this.x_end,y:this.y_end});
+        console.log(this.positions);
     }
 
     getIntensity(direction, grid) {
+    }
+
+
+
+    aStar_path_finding(grid, start, goal) {
+        // Initialisez les ensembles openSet, closedSet et les scores g et f
+        let openSet = new Set([start]);
+        let closedSet = new Set();
+        let gScore = {}; // Coût depuis le départ
+        let fScore = {}; // Coût total estimé
+        gScore[start] = 0;
+        fScore[start] = this.heuristic(start, goal);
+
+        let cameFrom = new Map();
+
+        while (openSet.size > 0) {
+            let current = this.getLowestFScore(openSet, fScore);
+            if (current.x === goal.x && current.y === goal.y) {
+                return this.reconstructPath(cameFrom, current);
+            }
+
+            openSet.delete(current);
+            closedSet.add(current);
+
+            for (let neighbor of this.getNeighbors(current, grid)) {
+                if (closedSet.has(neighbor)) continue;
+
+                let tentativeGScore = gScore[current] + this.distBetween(current, neighbor);
+                if (!openSet.has(neighbor)) openSet.add(neighbor);
+                else if (tentativeGScore >= gScore[neighbor]) continue;
+
+                cameFrom.set(neighbor, current);
+                gScore[neighbor] = tentativeGScore;
+                fScore[neighbor] = gScore[neighbor] + this.heuristic(neighbor, goal);
+            }
+        }
+
+        return []; // Aucun chemin trouvé
+    }
+
+    // Méthodes supplémentaires nécessaires pour l'A*
+    // getLowestFScore, heuristic, getNeighbors, distBetween, reconstructPath
+
+
+    return_to_start(grid, startPoint) {
+        // startPoint est le point de départ initial de la fourmi
+        let goal = startPoint; // Point de départ comme destination
+    
+        // Utiliser A* pour trouver le chemin du point actuel au point de départ
+        let path = this.aStar_path_finding(grid, { x: this.x, y: this.y }, goal);
+        if (path.length > 0) {
+            // Suivre le chemin pour retourner au point de départ
+            this.followPath(path);
+        }
+    }
+    
+    followPath(path) {
+        // Suivre le chemin donné (peut être implémenté de différentes manières)
+        // Exemple : définir le prochain point du chemin comme destination immédiate
+        let nextStep = path[0];
+        this.x_end = nextStep.x;
+        this.y_end = nextStep.y;
     }
 
 }

@@ -32,12 +32,24 @@ export class View {
    }
 
     display(grid, ants) {
-    this.drawGrid(grid);
+        this.drawGrid(grid);
 
-    // for each ant in ants drawAnt
-    for (let ant of ants) {
-        this.drawAnt(ant.x, ant.y);
-    }
+        // for each free cell in grid draw qty of pheromones
+        let offset = 30;
+        for (let i = 0; i < grid.length; i++) {
+            for (let j = 0; j < grid[0].length; j++){
+                if (grid[i][j] instanceof Free) {
+                    this.ctx.fillStyle = '#FFFFFF'; // Set text color to white
+                    this.ctx.textAlign = 'center';
+                    this.ctx.fillText(grid[i][j]._qty, j * this.cellSize+offset, i * this.cellSize+offset);
+                }
+            }
+        }
+
+        // for each ant in ants drawAnt
+        for (let ant of ants) {
+            this.drawAnt(ant.x, ant.y);
+        }
     }
 
     displayStart(grid) {
@@ -189,7 +201,9 @@ export class View {
                 let cell = grid[i][j];
                 
                 if (cell instanceof Free) { 
-                    // this.drawFree(i, j, 1);
+                    // draw _qty of pheromones with filltext
+                    // this.ctx.fillText(cell._qty, i * this.cellSize, j * this.cellSize)
+                    // this.ctx.fillStyle = '#000000';
                 } else if (cell instanceof Obstacle) {
                     this.drawShadow(i, j, 1.1); 
                     this.drawObstacle(i, j, 1.5);
