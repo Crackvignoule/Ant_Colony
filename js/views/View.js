@@ -53,7 +53,7 @@ export class View {
                         this.ctx.beginPath();
                         this.ctx.arc(x * this.cellSize+offset, y * this.cellSize+offset, radius, 0, 2 * Math.PI);
                         this.ctx.fill();
-                    }else{
+                    } else{
                         this.ctx.fillStyle = '#FFFFFF'; // Set text color to white
                         this.ctx.textAlign = 'center';
                         this.ctx.fillText(grid[y][x]._qty.toFixed(2), x * this.cellSize+offset, y * this.cellSize+offset);
@@ -188,7 +188,7 @@ export class View {
         );
 }
 
-    drawObjective(i, j, scale) {
+    drawObjective(i, j, scale=1.1) {
         let sx = 0;
         let sy = 0;
         let offset = 13;
@@ -232,7 +232,9 @@ export class View {
                     this.drawObstacle(i, j, 1.5);
                 }
                 else if (cell instanceof Objective) { 
-                    this.drawObjective(i, j, 1.1);
+                    this.ctx.globalAlpha = cell._qty;
+                    this.drawObjective(i, j, 1.1); // ou scale=1.1*cell._qty
+                    this.ctx.globalAlpha = 1;
                 }
                 else if (cell instanceof Start) { 
                     this.drawStart(i, j, 1);
