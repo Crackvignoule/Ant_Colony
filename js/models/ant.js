@@ -1,4 +1,4 @@
-// import { Free } from "./free.js";
+import { Free } from "./free.js";
 import { Objective } from "./objective.js";
 import { Obstacle } from "./obstacle.js";
 import { Start } from "./start.js";
@@ -11,25 +11,53 @@ export class Ant {
         this._fps = 60; // Frame rate.
         this.x_end = x;
         this.y_end = y;
-        this._speed = 2;
-        this.positions = [{x:this.x_end,y:this.y_end}];
+        this._speed = 5; // 2 de base
+        this.positions = [];
+        
+        this.isReturning = false;
+        this.numberPositionToStart;
     }
 
-    Move(durationFrame) {
-        // TODO CHECK YA UN TRUC BIZARRE
-        if (this.positions.length > 0) {
-            // Si la fourmi a un chemin à suivre dans positions
-            let nextPosition = this.positions.shift(); // Prendre le prochain point
+    Move(durationFrame,grid) {
+        if (this.isReturning) {
+            this.moveToStart(grid);
+        } else {
+            this.moveTowardsEnd(durationFrame);
+        }
+    }
+    
+    moveToStart(grid) {
+        if (this.returnPath.length > 0) {
+            let nextPosition = this.returnPath[0];
             this.x_end = nextPosition.x;
             this.y_end = nextPosition.y;
+            this.drop_pheromones(grid,this.x_end,this.y_end);
+    
+            let direction = Math.atan2(this.y_end - this.y, this.x_end - this.x);
+            let dx = Math.cos(direction);
+            let dy = Math.sin(direction);
+            this.x += dx * this._speed / this._fps;
+            this.y += dy * this._speed / this._fps;
+    
+            // Vérifier si la fourmi a atteint la prochaine position
+            if (Math.sqrt(Math.pow(this.x_end - this.x, 2) + Math.pow(this.y_end - this.y, 2)) < 0.1) {
+                this.returnPath.shift(); // Supprimer la position atteinte
+            }
+    
+            if (this.returnPath.length === 0) {
+                this.isReturning = false; // Réinitialisez l'état une fois le chemin de retour terminé
+            }
         }
-
+    }
+    
+    moveTowardsEnd(durationFrame) {
         let direction = Math.atan2(this.y_end - this.y, this.x_end - this.x);
         let dx = Math.cos(direction);
         let dy = Math.sin(direction);
         this.x += dx * this._speed / this._fps;
         this.y += dy * this._speed / this._fps;
     }
+    
 
     hasReachedDestination() {
         const distance = Math.sqrt(Math.pow(this.x_end - this.x, 2) + Math.pow(this.y_end - this.y, 2));
@@ -44,7 +72,10 @@ export class Ant {
         // gamma est ajouté aux cases sans pheromones pour éviter qu'elles ne soient jamais choisies
 
         if (grid[this.x_end][this.y_end] instanceof Objective){
-            this.return_to_start(grid,{x:10,y:9});
+            this.positions = [];
+            this.returnPath = this.aStar_path_finding(grid, { x: this.x_end, y: this.y_end }, {x:10,y:9});
+            this.numberPositionToStart = this.returnPath.length;
+            this.isReturning = true;
             return;
         }
         
@@ -69,6 +100,13 @@ export class Ant {
                 let proba = (gamma + grid[newX][newY]._qty);
                 if (grid[newX][newY] instanceof Objective) {
                     proba = Infinity; // If the cell is food, we want to go there for sure
+                    grid[newX][newY]._qty -= 0.1;
+
+                    //Si plus de nourriture on change avec une cellule vide
+                    if(grid[newX][newY]._qty <= 0){
+                        grid[newX][newY] = new Free(); 
+                    }
+                    console.log(grid[newX][newY]._qty);
                 }
                 probabilities.push(proba);
                 sumOfProbas += proba;
@@ -94,20 +132,15 @@ export class Ant {
         this.positions.push({x:this.x_end,y:this.y_end});
     }
 
-    drop_pheromones(grid){
-        // calculate qty of dropped pheromones
-        // qty = Q / length of path at k iteration
-        // by doing so, the closer the cells are to the food, the higher the qty of pheromones are
+    drop_pheromones(grid,x,y){
+        // cette fonction est appelée à chaque fois que la fourmi passe sur une case du chemin retour
+        let Q = 10; // constant
+        let path_length = this.returnPath.length;
+        let qty = path_length / Q;
 
-        let Q = 1; // constant
-        let path = this.positions;
-        let qty = Q / path.length;
-
-        // for (let cell of path){
-        //     grid[cell.x][cell.y]._qty += qty;
-        // }
+        // drop pheromones on the current cell
+        grid[x][y]._qty += qty;
     }
-
 
     aStar_path_finding(grid, start, goal) {
         let startKey = `${start.x},${start.y}`;
@@ -123,16 +156,16 @@ export class Ant {
     
         let cameFrom = new Map();
     
+        let compteur = 0;
         while (openSet.size > 0) {
-            let currentKey = this.getLowestFScore(openSet, fScore);
-    
+            let currentKey = this.getLowestFScore(openSet, fScore);    
+            
+            // Si on a atteint la destination, on reconstruit le chemin et on le suit
             if (currentKey === goalKey) {
-                return this.reconstructPath(cameFrom, currentKey);
+                compteur += 1;                
+                let path = this.reconstructPath(cameFrom, goalKey);
+                return path;
             }
-            if (typeof currentKey !== 'string') {
-                continue;
-            }
-    
             
 
             openSet.delete(currentKey);
@@ -142,27 +175,24 @@ export class Ant {
     
             for (let neighbor of this.getNeighbors(current, grid)) {
                 let neighborKey = `${neighbor.x},${neighbor.y}`;
-    
+            
                 if (closedSet.has(neighborKey)) continue;
-    
-                let tentativeGScore = gScore[currentKey] + this.distBetween(current, neighbor);
-    
+            
+                let tentativeGScore = gScore[currentKey] + 1;
+            
                 if (!openSet.has(neighborKey)) openSet.add(neighborKey);
                 else if (tentativeGScore >= (gScore[neighborKey] || Infinity)) continue;
-    
+            
                 cameFrom.set(neighborKey, currentKey);
                 gScore[neighborKey] = tentativeGScore;
                 fScore[neighborKey] = gScore[neighborKey] + this.heuristic(neighbor, goal);
             }
         }
-    
-        return []; // Aucun chemin trouvé
+        console.log("No path found");
+        return [];
     }
     
     
-
-    // Méthodes supplémentaires nécessaires pour l'A*
-    // getLowestFScore, heuristic, getNeighbors, distBetween, reconstructPath
 
     getLowestFScore(openSet, fScore) {
         let lowestKey = null;
@@ -180,27 +210,23 @@ export class Ant {
     }
     
     
-    
-    // Dans aStar_path_finding et partout où vous utilisez cameFrom, gScore, et fScore:
-    // Convertissez les coordonnées en chaîne de caractères avant de les utiliser comme clés.
-    // Par exemple:
-    // let nodeKey = `${current.x},${current.y}`;
-    // gScore[nodeKey] = ...
-    
-    reconstructPath(cameFrom, current) {
-        let totalPath = [current];
-        let currentKey = `${current.x},${current.y}`;
-    
+    reconstructPath(cameFrom, endKey) {
+        let path = [];
+        let currentKey = endKey;
         while (cameFrom.has(currentKey)) {
-            let cameFromKey = cameFrom.get(currentKey);
-            let [x, y] = cameFromKey.split(",").map(Number);
-            current = { x, y };
-            totalPath.unshift(current);
-            currentKey = cameFromKey;
+            let [x, y] = currentKey.split(",").map(Number);
+            
+            let node = { y, x };
+            path = [node].concat(path);
+
+
+            currentKey = cameFrom.get(currentKey);
         }
     
-        return totalPath;
+        return path;
     }
+    
+    
     
     heuristic(start, goal) {
         return Math.sqrt(Math.pow(start.x - goal.x, 2) + Math.pow(start.y - goal.y, 2));
@@ -214,32 +240,16 @@ export class Ant {
             let newX = node.x + dir[0];
             let newY = node.y + dir[1];
     
-            if (newX >= 0 && newX < grid.length && newY >= 0 && newY < grid[0].length && !(grid[newX][newY] instanceof Obstacle)) {
-                neighbors.push({ x: newX, y: newY });
+            if (newX >= 0 && newX < grid.length && newY >= 0 && newY < grid[0].length) {
+                if (!(grid[newX][newY] instanceof Obstacle)) {
+                    neighbors.push({ x: newX, y: newY });
+                } else {
+                }
             }
         });
     
         return neighbors;
     }
-
-    distBetween(current, neighbor) {
-        return 1; // Distance constante pour grille simplifiée
-    }
-
-    return_to_start(grid, startPoint) {
-        // startPoint est le point de départ initial de la fourmi
-        let goal = startPoint; // Point de départ comme destination
     
-        // Utiliser A* pour trouver le chemin du point actuel au point de départ
-        let path = this.aStar_path_finding(grid, { x: this.x, y: this.y }, goal);
-        if (path.length > 0) {
-            this.followPath(path);
-        }
-    }
-    
-    followPath(path) {
-        // Mise à jour de this.positions avec le chemin entier
-        this.positions = path.slice(); // Copie du chemin
-    }
 
 }

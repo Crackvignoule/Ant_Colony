@@ -21,6 +21,7 @@ export class View {
         this.ANT_IMAGE = ANT_IMAGE;
         this.endGame = false;
         this.ants = [];
+        this.showCircles = false;
 
         
 
@@ -36,12 +37,24 @@ export class View {
 
         // for each free cell in grid draw qty of pheromones
         let offset = 30;
-        for (let i = 0; i < grid.length; i++) {
-            for (let j = 0; j < grid[0].length; j++){
-                if (grid[i][j] instanceof Free) {
+        for (let y = 0; y < grid.length; y++) {
+            for (let x = 0; x < grid[0].length; x++){
+                if (grid[y][x] instanceof Free) {
                     this.ctx.fillStyle = '#FFFFFF'; // Set text color to white
                     this.ctx.textAlign = 'center';
-                    this.ctx.fillText(grid[i][j]._qty, j * this.cellSize+offset, i * this.cellSize+offset);
+                    this.ctx.fillText(grid[y][x]._qty.toFixed(2), x * this.cellSize+offset, y * this.cellSize+offset);
+
+                    // Scale _qty to a suitable radius size
+                    let radius = Math.sqrt(grid[y][x]._qty) * 5; // Adjust the multiplier as needed
+                        
+                    // Calculate color based on radius
+                    let red = Math.min(255, Math.round(radius * 10)); // Adjust the multiplier as needed
+                    let blue = 255 - red;
+                    this.ctx.fillStyle = 'rgb(' + red + ', 0, ' + blue + ')';
+                        
+                    this.ctx.beginPath();
+                    this.ctx.arc(x * this.cellSize+offset, y * this.cellSize+offset, radius, 0, 2 * Math.PI);
+                    this.ctx.fill();
                 }
             }
         }
@@ -51,6 +64,7 @@ export class View {
             this.drawAnt(ant.x, ant.y);
         }
     }
+
 
     displayStart(grid) {
         this.drawGrid(grid);
@@ -115,19 +129,16 @@ export class View {
         requestAnimationFrame(gameLoop);
     }
 
-    
-
-
-
 
     drawStart(i, j, scale) {
+        let offset = 10;
         let sx = 35; // x-coordinate of the top left corner of the source rectangle
         let sy = 646; // y-coordinate of the top left corner of the source rectangle
         this.ctx.drawImage(
             this.START_IMAGE, 
             sx, sy, 
             30, 26,
-            j * this.cellSize, i * this.cellSize, 
+            j * this.cellSize+offset, i * this.cellSize+offset, 
             this.cellSize * scale, this.cellSize * scale
         );
     }

@@ -1,5 +1,6 @@
 import {Ant} from './ant.js';
 import {GridModel} from './grid.js';
+import {Free} from './free.js';
 
 export class Environnement {
     constructor() {  
@@ -14,6 +15,7 @@ export class Environnement {
         this._frameDuration = 1000 / this._fps;
         this._cellSize = 36;
         this._timer = 0;
+        this.numberAnts = 10;
     }
 
     createAnts(){
@@ -40,17 +42,28 @@ export class Environnement {
     }
 
     Update(){
+           
+
         let currentTime = Date.now();
         let deltaTime = currentTime - this._startTime;
         this._lag += deltaTime;
         this._startTime = currentTime;
     
         if (this._lag >= this._frameDuration) {
+            
+            for (let i=0;i<this.grid.length;i++) {
+                for(let j=0;j<this.grid[i].length;j++){
+                    if(this.grid[i][j] instanceof Free){
+                        this.grid[i][j].evaporate();
+                    }
+                }
+            }
+
             for (let ant of this.ants) {
                 if (ant.hasReachedDestination()) {
                     ant.FindNewPosition(this.grid);
                 }
-                ant.Move(this._frameDuration);
+                ant.Move(this._frameDuration,this.grid);
             }
     
             this._lag -= this._frameDuration;

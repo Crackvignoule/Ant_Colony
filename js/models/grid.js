@@ -40,10 +40,10 @@ export class GridModel {
     buildGrid () {
         // Mapping of numbers to objects
         let objectMapping = {
-            0: new Free(),
-            1: new Obstacle(),
-            2: new Objective(),
-            3: new Start(),
+            0: () => new Free(),
+            1: () => new Obstacle(),
+            2: () => new Objective(),
+            3: () => new Start(),
         };
 
         let numberGrid = [
@@ -69,7 +69,7 @@ export class GridModel {
         // add 4 random food
         numberGrid = this.addObjective(numberGrid);
         // Convert number grid to object grid
-        let grid = numberGrid.map(row => row.map(cell => objectMapping[cell]));
+        let grid = numberGrid.map(row => row.map(cell => objectMapping[cell]()));
         return grid;
     }
 

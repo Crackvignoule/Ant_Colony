@@ -8,4 +8,15 @@ export class Free extends Cell {
 
     GetQty() { return this._qty;  }
     SetQty(newValue) { this._qty = newValue; }
+
+    evaporate(){
+        if(this._qty>0){
+            if(this._qty < 0.02){
+                this._qty = 0;
+            }else{
+                this._qty -= 0.02;
+            }
+            
+        }
+    }
 }
