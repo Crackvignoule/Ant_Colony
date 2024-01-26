@@ -4,19 +4,19 @@ import {Controller} from './controllers/Controller.js';
 
 
 const START_IMAGE = new Image();
-START_IMAGE.src = '../image/foodAndColony.png';
+START_IMAGE.src = 'image/foodAndColony.png';
 
 const TREE_IMAGE = new Image();
-TREE_IMAGE.src = '../image/tree.png';
+TREE_IMAGE.src = 'image/tree.png';
 
 const SHADOW_IMAGE = new Image();
-SHADOW_IMAGE.src = '../image/shadow.png';
+SHADOW_IMAGE.src = 'image/shadow.png';
 
 const KEBAB_IMAGE = new Image();
-KEBAB_IMAGE.src = '../image/kebab.png';
+KEBAB_IMAGE.src = 'image/kebab.png';
 
 const ANT_IMAGE = new Image();
-ANT_IMAGE.src = '../image/ant.png';
+ANT_IMAGE.src = 'image/ant.png';
 
 Promise.all([
     new Promise( (resolve) => {START_IMAGE.addEventListener('load', () => { resolve();}); }),
