@@ -106,7 +106,6 @@ export class Ant {
                     if(grid[newX][newY]._qty <= 0){
                         grid[newX][newY] = new Free(); 
                     }
-                    console.log(grid[newX][newY]._qty);
                 }
                 probabilities.push(proba);
                 sumOfProbas += proba;
@@ -188,7 +187,6 @@ export class Ant {
                 fScore[neighborKey] = gScore[neighborKey] + this.heuristic(neighbor, goal);
             }
         }
-        console.log("No path found");
         return [];
     }
     

@@ -40,21 +40,25 @@ export class View {
         for (let y = 0; y < grid.length; y++) {
             for (let x = 0; x < grid[0].length; x++){
                 if (grid[y][x] instanceof Free) {
-                    this.ctx.fillStyle = '#FFFFFF'; // Set text color to white
-                    this.ctx.textAlign = 'center';
-                    this.ctx.fillText(grid[y][x]._qty.toFixed(2), x * this.cellSize+offset, y * this.cellSize+offset);
-
-                    // Scale _qty to a suitable radius size
-                    let radius = Math.sqrt(grid[y][x]._qty) * 5; // Adjust the multiplier as needed
-                        
-                    // Calculate color based on radius
-                    let red = Math.min(255, Math.round(radius * 10)); // Adjust the multiplier as needed
-                    let blue = 255 - red;
-                    this.ctx.fillStyle = 'rgb(' + red + ', 0, ' + blue + ')';
-                        
-                    this.ctx.beginPath();
-                    this.ctx.arc(x * this.cellSize+offset, y * this.cellSize+offset, radius, 0, 2 * Math.PI);
-                    this.ctx.fill();
+                    
+                    if(this.showCircles){
+                        // Scale _qty to a suitable radius size
+                        let radius = Math.sqrt(grid[y][x]._qty) * 5; // Adjust the multiplier as needed
+                                                
+                        // Calculate color based on radius
+                        let red = Math.min(255, Math.round(radius * 10)); // Adjust the multiplier as needed
+                        let blue = 255 - red;
+                        this.ctx.fillStyle = 'rgb(' + red + ', 0, ' + blue + ')';
+                            
+                        this.ctx.beginPath();
+                        this.ctx.arc(x * this.cellSize+offset, y * this.cellSize+offset, radius, 0, 2 * Math.PI);
+                        this.ctx.fill();
+                    }else{
+                        this.ctx.fillStyle = '#FFFFFF'; // Set text color to white
+                        this.ctx.textAlign = 'center';
+                        this.ctx.fillText(grid[y][x]._qty.toFixed(2), x * this.cellSize+offset, y * this.cellSize+offset);
+                    }
+                    
                 }
             }
         }
@@ -73,6 +77,14 @@ export class View {
     initGame() {
 
         let button = document.getElementById("start-button");
+        let button_pheromone = document.getElementById("pheromones-button");
+
+        this.buttonPheromoneClickHandler = () => {
+                this.showCircles = !this.showCircles;
+        };
+        button_pheromone.addEventListener('click', this.buttonPheromoneClickHandler);
+        
+
         let intervalId = null;
         let seconds = 0;
         let minutes = 0;
