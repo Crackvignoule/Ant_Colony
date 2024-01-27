@@ -20,6 +20,7 @@ export class View {
         this.KEBAB_IMAGE = KEBAB_IMAGE;
         this.ANT_IMAGE = ANT_IMAGE;
         this.endGame = false;
+        this.showCircles=true;
         this.ants = [];
 
         
@@ -31,7 +32,7 @@ export class View {
         this.get = callback;
    }
 
-    display(grid, ants, showCircles=true) {
+    display(grid, ants) {
         this.drawGrid(grid);
 
         // for each free cell in grid draw qty of pheromones
@@ -40,7 +41,7 @@ export class View {
             for (let x = 0; x < grid[0].length; x++){
                 if (grid[y][x] instanceof Free) {
                     
-                    if(showCircles){
+                    if(this.showCircles){
                         // Scale _qty to a suitable radius size
                         let radius = Math.sqrt(grid[y][x]._qty) * 5; // Adjust the multiplier as needed                   
                         // Calculate color based on radius
