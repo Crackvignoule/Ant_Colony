@@ -21,7 +21,6 @@ export class View {
         this.ANT_IMAGE = ANT_IMAGE;
         this.endGame = false;
         this.ants = [];
-        this.showCircles = false;
 
         
 
@@ -32,7 +31,7 @@ export class View {
         this.get = callback;
    }
 
-    display(grid, ants) {
+    display(grid, ants, showCircles=true) {
         this.drawGrid(grid);
 
         // for each free cell in grid draw qty of pheromones
@@ -41,10 +40,9 @@ export class View {
             for (let x = 0; x < grid[0].length; x++){
                 if (grid[y][x] instanceof Free) {
                     
-                    if(this.showCircles){
+                    if(showCircles){
                         // Scale _qty to a suitable radius size
-                        let radius = Math.sqrt(grid[y][x]._qty) * 5; // Adjust the multiplier as needed
-                                                
+                        let radius = Math.sqrt(grid[y][x]._qty) * 5; // Adjust the multiplier as needed                   
                         // Calculate color based on radius
                         let red = Math.min(255, Math.round(radius * 10)); // Adjust the multiplier as needed
                         let blue = 255 - red;
@@ -65,6 +63,13 @@ export class View {
 
         // for each ant in ants drawAnt
         for (let ant of ants) {
+            // TODO ROTATE ANT
+            // this.ctx.save(); // Save the current state of the canvas
+            // this.ctx.translate(ant.y * this.cellSize + this.cellSize / 2, ant.x * this.cellSize + this.cellSize / 2); // Move the origin to the center of the ant
+            // this.ctx.rotate(ant.rotation); // Rotate the canvas around the new origin
+            // this.ctx.translate(-this.cellSize / 2, -this.cellSize / 2); // Move the origin back to the top-left corner of the ant
+            // this.drawAnt(0, 0); // Draw the ant at the new origin
+            // this.ctx.restore(); // Restore the saved state of the canvas
             this.drawAnt(ant.x, ant.y);
         }
     }
