@@ -254,7 +254,7 @@ export class View {
         let sy = 0;
         this.ctx.drawImage(
             this.ANT_IMAGE, 
-            sx, sy, 
+            sx+direction*64, sy, 
             64, 64,
             j * this.cellSize, i * this.cellSize, 
             this.cellSize * scale, this.cellSize * scale

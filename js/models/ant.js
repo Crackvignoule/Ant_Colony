@@ -11,7 +11,7 @@ export class Ant {
         this._fps = 60; // Frame rate.
         this.x_end = x;
         this.y_end = y;
-        this._speed = 5; // 2 de base
+        this._speed = 5 // 2 de base
         this.positions = [];
         
         this.isReturning = false;
@@ -19,6 +19,7 @@ export class Ant {
     }
 
     Move(durationFrame,grid) {
+        this.setDirection(this.x-this.x_end,this.y-this.y_end); // set direction
         if (this.isReturning) {
             this.moveToStart(grid);
         } else {
@@ -52,6 +53,7 @@ export class Ant {
     
     moveTowardsEnd(durationFrame) {
         let direction = Math.atan2(this.y_end - this.y, this.x_end - this.x);
+
         let dx = Math.cos(direction);
         let dy = Math.sin(direction);
         this.x += dx * this._speed / this._fps;
@@ -62,6 +64,21 @@ export class Ant {
     hasReachedDestination() {
         const distance = Math.sqrt(Math.pow(this.x_end - this.x, 2) + Math.pow(this.y_end - this.y, 2));
         return distance < 0.1; // Définissez un seuil de proximité approprié
+    }
+
+    setDirection(dx,dy){
+        if ((dx<-0.5) && (dy>-0.5) && (dy<0.5)) {  // up
+            this.direction = 3;
+        }
+        else if ((dx>0.5) && (dy>-0.5) && (dy<0.5)) {  // down
+            this.direction = 1;
+        }
+        else if ((dy<-0.5) && (dx>-0.5) && (dx<0.5)) {  // left
+            this.direction = 2;
+        }
+        else if ((dy>0.5) && (dx>-0.5) && (dx<0.5)) {  // right
+            this.direction = 0;
+        }
     }
     
     FindNewPosition(grid){
@@ -129,17 +146,6 @@ export class Ant {
         this.x_end += directions[index][0]
         this.y_end += directions[index][1]
         this.positions.push({x:this.x_end,y:this.y_end});
-
-        // TODO rotate ant
-        if (directions[index][0] == 1){  // Y+1
-            this.direction = "up";
-        } else if (directions[index][0] == -1){  // Y-1
-            this.direction = "down";
-        } else if (directions[index][1] == 1){  // X+1
-            this.direction = "right";
-        } else if (directions[index][1] == -1){  // X-1
-            this.direction = "left";
-        }
     }
 
     drop_pheromones(grid,x,y){
