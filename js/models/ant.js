@@ -131,15 +131,15 @@ export class Ant {
         this.positions.push({x:this.x_end,y:this.y_end});
 
         // TODO rotate ant
-        // if (directions[index][0] == 1){  // Y+1
-        //     this.rotation = Math.PI*3/2;
-        // } else if (directions[index][0] == -1){  // Y-1
-        //     this.rotation = Math.PI/2;
-        // } else if (directions[index][1] == 1){  // X+1
-        //     this.rotation = Math.PI;
-        // } else if (directions[index][1] == -1){  // X-1
-        //     this.rotation = 0;
-        // }
+        if (directions[index][0] == 1){  // Y+1
+            this.direction = "up";
+        } else if (directions[index][0] == -1){  // Y-1
+            this.direction = "down";
+        } else if (directions[index][1] == 1){  // X+1
+            this.direction = "right";
+        } else if (directions[index][1] == -1){  // X-1
+            this.direction = "left";
+        }
     }
 
     drop_pheromones(grid,x,y){

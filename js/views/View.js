@@ -71,7 +71,7 @@ export class View {
             // this.ctx.translate(-this.cellSize / 2, -this.cellSize / 2); // Move the origin back to the top-left corner of the ant
             // this.drawAnt(0, 0); // Draw the ant at the new origin
             // this.ctx.restore(); // Restore the saved state of the canvas
-            this.drawAnt(ant.x, ant.y);
+            this.drawAnt(ant.x, ant.y, ant.direction);
         }
     }
 
@@ -148,7 +148,7 @@ export class View {
     }
 
 
-    drawStart(i, j, scale) {
+    drawStart(i, j, scale=1) {
         let offset = 10;
         let sx = 35; // x-coordinate of the top left corner of the source rectangle
         let sy = 646; // y-coordinate of the top left corner of the source rectangle
@@ -161,7 +161,7 @@ export class View {
         );
     }
 
-    drawObstacle(i, j, scale) {
+    drawObstacle(i, j, scale=1.5) {
         let sx = 0; // x-coordinate of the top left corner of the source rectangle
         let sy = 0; // y-coordinate of the top left corner of the source rectangle
         this.ctx.drawImage(
@@ -173,7 +173,7 @@ export class View {
         );
     }
 
-    drawShadow(i, j, scale) {
+    drawShadow(i, j, scale=1.1) {
         let sx = 48; // x-coordinate of the top left corner of the source rectangle for the shadow
         let sy = 100; // y-coordinate of the top left corner of the source rectangle for the shadow
         let sw = 133 - sx; // width of the source rectangle for the shadow
@@ -234,22 +234,22 @@ export class View {
                     // this.ctx.fillText(cell._qty, i * this.cellSize, j * this.cellSize)
                     // this.ctx.fillStyle = '#000000';
                 } else if (cell instanceof Obstacle) {
-                    this.drawShadow(i, j, 1.1); 
-                    this.drawObstacle(i, j, 1.5);
+                    this.drawShadow(i, j); 
+                    this.drawObstacle(i, j);
                 }
                 else if (cell instanceof Objective) { 
                     this.ctx.globalAlpha = cell._qty;
-                    this.drawObjective(i, j, 1.1); // ou scale=1.1*cell._qty
+                    this.drawObjective(i, j);
                     this.ctx.globalAlpha = 1;
                 }
                 else if (cell instanceof Start) { 
-                    this.drawStart(i, j, 1);
+                    this.drawStart(i, j);
                 }
             }
         }
     }
 
-    drawAnt(i, j, scale=1) {
+    drawAnt(i, j, direction, scale=1) {
         let sx = 0;
         let sy = 0;
         this.ctx.drawImage(
