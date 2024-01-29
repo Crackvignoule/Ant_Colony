@@ -96,7 +96,7 @@ export class Ant {
             return;
         }
         
-        let gamma = 0.5;
+        let gamma = 0.01;
 
         let directions = [
             [-1, 0], // up
