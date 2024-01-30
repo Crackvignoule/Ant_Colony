@@ -150,7 +150,7 @@ export class Ant {
 
     drop_pheromones(grid,x,y){
         // cette fonction est appelée à chaque fois que la fourmi passe sur une case du chemin retour
-        let Q = 10; // constant
+        let Q = 15; // constant
         let path_length = this.returnPath.length;
         let qty = path_length / Q;
 
