@@ -18,7 +18,7 @@ export class Environnement {
     }
 
     createAnts(){
-        for (let i=0; i<5; i++){
+        for (let i=0; i<15; i++){
             this.ants.push(new Ant(10,9));
         }
     }
