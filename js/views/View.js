@@ -250,13 +250,14 @@ export class View {
     }
 
     drawAnt(i, j, direction, scale=1) {
+        let offset = 10;
         let sx = 0;
         let sy = 0;
         this.ctx.drawImage(
             this.ANT_IMAGE, 
             sx+direction*64, sy, 
             64, 64,
-            j * this.cellSize, i * this.cellSize, 
+            j * this.cellSize + offset, i * this.cellSize + offset, 
             this.cellSize * scale, this.cellSize * scale
         );
     }
