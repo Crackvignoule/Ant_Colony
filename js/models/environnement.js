@@ -15,11 +15,10 @@ export class Environnement {
         this._frameDuration = 1000 / this._fps;
         this._cellSize = 36;
         this._timer = 0;
-        this.numberAnts = 10;
     }
 
     createAnts(){
-        for (let i=0; i<20; i++){
+        for (let i=0; i<5; i++){
             this.ants.push(new Ant(10,9));
         }
     }
@@ -68,8 +67,6 @@ export class Environnement {
             this._lag -= this._frameDuration;
             this.display(this.grid, this.ants);
         }
-    
-        //requestAnimationFrame(this.Update.bind(this));
     }
     
     

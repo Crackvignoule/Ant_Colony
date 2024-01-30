@@ -11,7 +11,7 @@ export class Ant {
         this._fps = 60; // Frame rate.
         this.x_end = x;
         this.y_end = y;
-        this._speed = 5 // 2 de base
+        this._speed = 3 // 2 de base
         this.positions = [];
         
         this.isReturning = false;
@@ -46,6 +46,7 @@ export class Ant {
             }
     
             if (this.returnPath.length === 0) {
+                this.positions = []
                 this.isReturning = false; // Réinitialisez l'état une fois le chemin de retour terminé
             }
         }
@@ -89,7 +90,7 @@ export class Ant {
         // gamma est ajouté aux cases sans pheromones pour éviter qu'elles ne soient jamais choisies
 
         if (grid[this.x_end][this.y_end] instanceof Objective){
-            this.positions = [];
+            //this.positions = [];
             this.returnPath = this.aStar_path_finding(grid, { x: this.x_end, y: this.y_end }, {x:10,y:9});
             this.numberPositionToStart = this.returnPath.length;
             this.isReturning = true;
@@ -258,13 +259,27 @@ export class Ant {
             if (newX >= 0 && newX < grid.length && newY >= 0 && newY < grid[0].length) {
                 if (!(grid[newX][newY] instanceof Obstacle)) {
                     neighbors.push({ x: newX, y: newY });
-                } else {
                 }
             }
         });
     
+        // Ajouter les cellules de this.positions comme voisins potentiels
+        for (let pos of this.positions) {
+            if (this.isNeighbor(node, pos)) {
+                neighbors.push({ x: pos.x, y: pos.y });
+            }
+        }
+    
         return neighbors;
     }
+    
+    isNeighbor(node, pos) {
+        // Vérifie si pos est un voisin direct de node sans mouvement diagonal
+        return (node.x === pos.x && Math.abs(node.y - pos.y) === 1) || 
+               (node.y === pos.y && Math.abs(node.x - pos.x) === 1);
+    }
+    
+    
     
 
 }
