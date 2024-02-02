@@ -9,3 +9,5 @@ To run the site, follow these steps:
 1. Download the project files.
 2. Navigate to the project directory.
 3. Open the `index.html` file in your preferred web browser.
+
+By Killian PAVY & Rémy LOURON
