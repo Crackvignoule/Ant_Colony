@@ -1,7 +1,3 @@
-// TODO WE NEED A FUNCTION UPDATE DISPLAY IN THE VIEW
-// TODO REFACTOR IN SEPARATE FUNCTIONS
-// TODO RENAME CLASSES (gridModel -> Model,...)
-
 import {Free} from "../models/free.js";
 import {Obstacle} from "../models/obstacle.js";
 import {Objective} from "../models/objective.js";
@@ -64,13 +60,6 @@ export class View {
 
         // for each ant in ants drawAnt
         for (let ant of ants) {
-            // TODO ROTATE ANT
-            // this.ctx.save(); // Save the current state of the canvas
-            // this.ctx.translate(ant.y * this.cellSize + this.cellSize / 2, ant.x * this.cellSize + this.cellSize / 2); // Move the origin to the center of the ant
-            // this.ctx.rotate(ant.rotation); // Rotate the canvas around the new origin
-            // this.ctx.translate(-this.cellSize / 2, -this.cellSize / 2); // Move the origin back to the top-left corner of the ant
-            // this.drawAnt(0, 0); // Draw the ant at the new origin
-            // this.ctx.restore(); // Restore the saved state of the canvas
             this.drawAnt(ant.x, ant.y, ant.direction);
         }
     }
